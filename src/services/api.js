@@ -1,7 +1,7 @@
 
 class ApiService {
   async request(endpoint, options = {}) {
-    const API_BASE_URL = 'https://naeturbok-back.onrender.com';
+    const API_BASE_URL = 'https://naeturbok-back.onrender.com/api';
     const url = `${API_BASE_URL}${endpoint}`;
     const config = {
       headers: {
