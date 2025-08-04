@@ -1,6 +1,6 @@
 import React from 'react';
 import TrackingApp from './components/TrackingApp';
-import './styles/index.css';
+import './index.css';
 
 function App() {
   return (
