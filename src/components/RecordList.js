@@ -10,6 +10,7 @@ const RecordList = ({
 }) => {
   const formatDate = (dateStr) => {
     return new Date(dateStr).toLocaleDateString('is-IS', {
+      weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric'

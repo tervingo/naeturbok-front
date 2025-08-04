@@ -8,6 +8,15 @@ const RecordForm = ({
   onCancel, 
   loading 
 }) => {
+  const formatDateWithWeekday = (dateStr) => {
+    if (!dateStr) return '';
+    return new Date(dateStr).toLocaleDateString('is-IS', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
   const addLeak = () => {
     setRecord(prev => ({
       ...prev,
@@ -107,6 +116,11 @@ const RecordForm = ({
           onChange={(e) => setRecord(prev => ({ ...prev, date: e.target.value }))}
           className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
+        {record.date && (
+          <div className="mt-2 text-sm text-gray-600">
+            {formatDateWithWeekday(record.date)}
+          </div>
+        )}
       </div>
 
       {/* Upplýsingar */}
