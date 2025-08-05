@@ -56,16 +56,22 @@ class ApiService {
   }
 
   async createRecord(recordData) {
+    // Remove fields that shouldn't be sent to the API
+    const { _id, fjöldiLeka, 'fjöldi leka': fjoldiLeka, ...cleanData } = recordData;
+    
     return this.request('/records', {
       method: 'POST',
-      body: JSON.stringify(recordData),
+      body: JSON.stringify(cleanData),
     });
   }
 
   async updateRecord(id, recordData) {
+    // Remove fields that shouldn't be sent to the API
+    const { _id, fjöldiLeka, 'fjöldi leka': fjoldiLeka, ...cleanData } = recordData;
+    
     return this.request(`/records/${id}`, {
       method: 'PUT',
-      body: JSON.stringify(recordData),
+      body: JSON.stringify(cleanData),
     });
   }
 
