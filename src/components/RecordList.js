@@ -1,5 +1,6 @@
-import React from 'react';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Plus, Edit, Trash2, Download } from 'lucide-react';
+import ExportDialog from './ExportDialog';
 
 const RecordList = ({ 
   records, 
@@ -8,6 +9,8 @@ const RecordList = ({
   onDelete, 
   onCreateNew 
 }) => {
+  const [showExportDialog, setShowExportDialog] = useState(false);
+
   const formatDate = (dateStr) => {
     return new Date(dateStr).toLocaleDateString('is-IS', {
       weekday: 'long',
@@ -35,13 +38,23 @@ const RecordList = ({
     <div className="max-w-6xl mx-auto p-4">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-800">Registros</h2>
-        <button
-          onClick={onCreateNew}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-        >
-          <Plus size={16} />
-          Nuevo registro
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowExportDialog(true)}
+            disabled={records.length === 0}
+            className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Download size={16} />
+            Exportar Excel
+          </button>
+          <button
+            onClick={onCreateNew}
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          >
+            <Plus size={16} />
+            Nuevo registro
+          </button>
+        </div>
       </div>
 
       {records.length === 0 ? (
@@ -69,6 +82,12 @@ const RecordList = ({
           ))}
         </div>
       )}
+
+      <ExportDialog
+        records={records}
+        isOpen={showExportDialog}
+        onClose={() => setShowExportDialog(false)}
+      />
     </div>
   );
 };
