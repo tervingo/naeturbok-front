@@ -369,7 +369,7 @@ const RecordForm = ({
                   onChange={(e) => updateLát(index, 'flaedi', parseInt(e.target.value))}
                   className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value={0}>0 - Lítið</option>
+                  <option value={0}>0 - Ekkert</option>
                   <option value={1}>1 - Miðlungs</option>
                   <option value={2}>2 - Mikið</option>
                 </select>
