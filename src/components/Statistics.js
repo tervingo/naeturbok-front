@@ -33,7 +33,9 @@ const Statistics = ({ records }) => {
   const totalCoffee = records.reduce((sum, record) => sum + (record.upplýsingar?.kaffi || 0), 0);
   const averageCoffee = totalRecords > 0 ? Math.round((totalCoffee / totalRecords) * 10) / 10 : 0;
   
-  const exerciseDays = records.filter(record => record.upplýsingar?.æfing > 0).length;
+  const exerciseDays = records.filter(record => 
+    record.upplýsingar?.æfing && record.upplýsingar.æfing.type !== 'nej'
+  ).length;
   const exercisePercentage = totalRecords > 0 ? Math.round((exerciseDays / totalRecords) * 100) : 0;
 
   const alcoholDays = records.filter(record => {
@@ -270,9 +272,11 @@ const Statistics = ({ records }) => {
                       {record.upplýsingar?.kaffi || 0}
                     </td>
                     <td className="py-2 px-3 text-sm text-center">
-                      {record.upplýsingar?.æfing > 0 ? (
-                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-800 text-xs font-medium">
-                          ✓
+                      {record.upplýsingar?.æfing && record.upplýsingar.æfing.type !== 'nej' ? (
+                        <span className="inline-flex items-center justify-center px-2 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-medium">
+                          {record.upplýsingar.æfing.type}
+                          {record.upplýsingar.æfing.type === 'labba' && record.upplýsingar.æfing.km && 
+                            ` ${record.upplýsingar.æfing.km}km`}
                         </span>
                       ) : (
                         <span className="text-gray-400">-</span>

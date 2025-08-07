@@ -152,11 +152,13 @@ const RecordCard = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
           </div>
         )}
 
-        {record.upplýsingar?.æfing > 0 && (
+        {record.upplýsingar?.æfing && record.upplýsingar.æfing.type !== 'nej' && (
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-gray-600">Æfing:</span>
             <span className="text-sm text-gray-800">
-              {record.upplýsingar.æfing === 1 ? 'Létt' : 'Þung'}
+              {record.upplýsingar.æfing.type}
+              {record.upplýsingar.æfing.type === 'labba' && record.upplýsingar.æfing.km && 
+                ` (${record.upplýsingar.æfing.km} km)`}
             </span>
           </div>
         )}

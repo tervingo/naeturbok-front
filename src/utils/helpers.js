@@ -23,7 +23,7 @@ export const formatDate = (dateStr) => {
       hvar: '',
       kaffi: 0,
       áfengi: { bjór: 0, vín: 0, annar: 0 },
-      æfing: 0,
+      æfing: { type: 'nej', km: null },
       sðl: false,
       'lip-riv': '',
       'sið lio': '',
@@ -64,19 +64,18 @@ export const formatDate = (dateStr) => {
       totalLát,
       averageIntensity: Math.round(averageIntensity * 10) / 10,
       totalAlcohol,
-      hasExercise: record.upplýsingar?.æfing > 0,
+      hasExercise: record.upplýsingar?.æfing && record.upplýsingar.æfing.type !== 'nej',
       coffeeCups: record.upplýsingar?.kaffi || 0
     };
   };
   
   // Obtener texto legible para valores de enum
-  export const getExerciseText = (value) => {
-    const texts = {
-      0: 'Nei',
-      1: 'Létt',
-      2: 'Þung'
-    };
-    return texts[value] || 'Nei';
+  export const getExerciseText = (æfing) => {
+    if (!æfing || æfing.type === 'nej') return 'nej';
+    if (æfing.type === 'labba' && æfing.km) {
+      return `${æfing.type} (${æfing.km} km)`;
+    }
+    return æfing.type;
   };
   
   export const getIntensityText = (value) => {

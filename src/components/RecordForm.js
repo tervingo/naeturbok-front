@@ -70,6 +70,16 @@ const RecordForm = ({
     }));
   };
 
+  const updateÆfing = (field, value) => {
+    setRecord(prev => ({
+      ...prev,
+      upplýsingar: {
+        ...prev.upplýsingar,
+        æfing: { ...prev.upplýsingar.æfing, [field]: value }
+      }
+    }));
+  };
+
   const updateÁfengi = (field, value) => {
     setRecord(prev => ({
       ...prev,
@@ -152,14 +162,29 @@ const RecordForm = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Æfing</label>
             <select
-              value={record.upplýsingar.æfing}
-              onChange={(e) => updateUpplýsingar('æfing', parseInt(e.target.value))}
+              value={record.upplýsingar.æfing?.type || 'nej'}
+              onChange={(e) => updateÆfing('type', e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
-              <option value={0}>Nei</option>
-              <option value={1}>Létt</option>
-              <option value={2}>Þung</option>
+              <option value="nej">nej</option>
+              <option value="Dir">Dir</option>
+              <option value="labba">labba</option>
+              <option value="annað">annað</option>
             </select>
+            {record.upplýsingar.æfing?.type === 'labba' && (
+              <div className="mt-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Km</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  min="0"
+                  value={record.upplýsingar.æfing?.km || ''}
+                  onChange={(e) => updateÆfing('km', parseFloat(e.target.value) || null)}
+                  placeholder="N,m"
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            )}
           </div>
         </div>
 
