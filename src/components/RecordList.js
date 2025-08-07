@@ -152,7 +152,7 @@ const RecordCard = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
           </div>
         )}
 
-        {record.upplýsingar?.æfing && record.upplýsingar.æfing.type !== 'nej' && (
+        {record.upplýsingar?.æfing && (
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-gray-600">Æfing:</span>
             <span className="text-sm text-gray-800">
