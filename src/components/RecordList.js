@@ -13,9 +13,9 @@ const RecordList = ({
 
   const formatDate = (dateStr) => {
     return new Date(dateStr).toLocaleDateString('is-IS', {
-      weekday: 'long',
+      weekday: 'short',
       year: 'numeric',
-      month: 'long',
+      month: 'short',
       day: 'numeric'
     });
   };
@@ -95,8 +95,8 @@ const RecordList = ({
 const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
   const lekarCount = record['fjöldi leka'] || 0;
   const bgStyle = lekarCount === 0 
-    ? { backgroundColor: '#dcfce7', borderColor: '#86efac' } 
-    : { backgroundColor: '#fee2e2', borderColor: '#fca5a5' };
+    ? { backgroundColor: 'limegreen', borderColor: '#86efac' } 
+    : { backgroundColor: 'lightsalmon', borderColor: '#fca5a5' };
   const textColor = lekarCount === 0 ? 'text-green-800' : 'text-red-800';
   
   return (
@@ -107,7 +107,7 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6 flex-1">
           <div className="min-w-0">
-            <h3 className="text-sm font-semibold text-gray-800 truncate">
+            <h3 className="text-base font-semibold text-gray-200 truncate">
               {formatDate(record.date)}
             </h3>
           </div>
@@ -200,13 +200,13 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
         </div>
       </div>
 
-      {record.athugasemd && (
+{/*       {record.athugasemd && (
         <div className="mt-3 pt-3 border-t border-gray-200">
           <div className="text-sm text-gray-700">
             <strong>Athugasemd:</strong> {record.athugasemd}
           </div>
         </div>
-      )}
+      )} 
 
       {record.lekar && record.lekar.length > 0 && (
         <div className="mt-3 pt-3 border-t border-gray-200">
@@ -227,6 +227,7 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
           )}
         </div>
       )}
+      */}
     </div>
   );
 };

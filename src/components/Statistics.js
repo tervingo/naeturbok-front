@@ -252,7 +252,7 @@ const Statistics = ({ records }) => {
               </thead>
               <tbody>
                 {records.slice(0, 7).map((record, index) => (
-                  <tr key={record._id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                  <tr key={record._id} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
                     <td className="py-2 px-3 text-sm text-gray-900">
                       {formatDate(record.date)}
                     </td>
