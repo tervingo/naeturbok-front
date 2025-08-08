@@ -69,9 +69,9 @@ const RecordList = ({
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="space-y-3">
           {records.map((record) => (
-            <RecordCard 
+            <RecordBar 
               key={record._id}
               record={record}
               onEdit={() => onEdit(record)}
@@ -92,127 +92,136 @@ const RecordList = ({
   );
 };
 
-const RecordCard = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
+const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
+  const lekarCount = record['fjöldi leka'] || 0;
+  const bgColor = lekarCount === 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
+  const textColor = lekarCount === 0 ? 'text-green-800' : 'text-red-800';
+  
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-800">
-          {formatDate(record.date)}
-        </h3>
-        <div className="flex gap-2">
+    <div className={`${bgColor} border rounded-lg p-4 hover:shadow-md transition-shadow`}>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-6 flex-1">
+          <div className="min-w-0">
+            <h3 className="text-sm font-semibold text-gray-800 truncate">
+              {formatDate(record.date)}
+            </h3>
+          </div>
+          
+          <div className="flex items-center gap-1">
+            <span className="text-sm font-medium text-gray-600">Lekar:</span>
+            <span className={`text-sm font-bold ${textColor}`}>
+              {lekarCount}
+            </span>
+          </div>
+
+          {record.upplýsingar?.hvar && (
+            <div className="flex items-center gap-1">
+              <span className="text-sm text-gray-600">Hvar:</span>
+              <span className="text-sm text-gray-800">{record.upplýsingar.hvar}</span>
+            </div>
+          )}
+
+          {record.upplýsingar?.kaffi > 0 && (
+            <div className="flex items-center gap-1">
+              <span className="text-sm text-gray-600">Kaffi:</span>
+              <span className="text-sm text-gray-800">{record.upplýsingar.kaffi}</span>
+            </div>
+          )}
+
+          {(record.upplýsingar?.áfengi?.bjór > 0 || 
+            record.upplýsingar?.áfengi?.vín > 0 || 
+            record.upplýsingar?.áfengi?.annar > 0) && (
+            <div className="flex items-center gap-1">
+              <span className="text-sm text-gray-600">Áfengi:</span>
+              <span className="text-sm text-gray-800">
+                {(record.upplýsingar.áfengi.bjór || 0) + 
+                 (record.upplýsingar.áfengi.vín || 0) + 
+                 (record.upplýsingar.áfengi.annar || 0)}
+              </span>
+            </div>
+          )}
+
+          {record.upplýsingar?.æfing && (
+            <div className="flex items-center gap-1">
+              <span className="text-sm text-gray-600">Æfing:</span>
+              <span className="text-sm text-gray-800">
+                {record.upplýsingar.æfing.type}
+                {record.upplýsingar.æfing.type === 'labba' && record.upplýsingar.æfing.km && 
+                  ` (${record.upplýsingar.æfing.km} km)`}
+              </span>
+            </div>
+          )}
+
+          {record.lát && record.lát.length > 0 && (
+            <div className="flex items-center gap-1">
+              <span className="text-sm text-gray-600">Lát:</span>
+              <span className="text-sm text-gray-800">{record.lát.length}</span>
+            </div>
+          )}
+
+          <div className="flex flex-wrap gap-1">
+            {record.upplýsingar?.sðl && (
+              <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">SÐL</span>
+            )}
+            {record.upplýsingar?.natft && (
+              <span className="px-2 py-1 text-xs bg-purple-100 text-purple-800 rounded-full">Natft</span>
+            )}
+            {record.upplýsingar?.bl && (
+              <span className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">BL</span>
+            )}
+            {record.upplýsingar?.pap && (
+              <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Pap</span>
+            )}
+          </div>
+        </div>
+        
+        <div className="flex gap-2 ml-4">
           <button
             onClick={onEdit}
-            className="text-blue-600 hover:text-blue-800 p-1"
+            className="flex items-center gap-1 text-blue-600 hover:text-blue-800 hover:bg-blue-100 px-3 py-1 rounded text-sm font-medium transition-colors"
             title="Editar"
           >
-            <Edit size={16} />
+            <Edit size={14} />
+            Editar
           </button>
           <button
             onClick={onDelete}
-            className="text-red-600 hover:text-red-800 p-1"
+            className="flex items-center gap-1 text-red-600 hover:text-red-800 hover:bg-red-100 px-3 py-1 rounded text-sm font-medium transition-colors"
             title="Eliminar"
           >
-            <Trash2 size={16} />
+            <Trash2 size={14} />
+            Borrar
           </button>
         </div>
       </div>
 
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-600">Lekar:</span>
-          <span className="text-sm text-gray-800 font-semibold">
-            {record['fjöldi leka'] || 0}
-          </span>
+      {record.athugasemd && (
+        <div className="mt-3 pt-3 border-t border-gray-200">
+          <div className="text-sm text-gray-700">
+            <strong>Athugasemd:</strong> {record.athugasemd}
+          </div>
         </div>
+      )}
 
-        {record.upplýsingar?.hvar && (
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-600">Hvar:</span>
-            <span className="text-sm text-gray-800">{record.upplýsingar.hvar}</span>
-          </div>
-        )}
-
-        {record.upplýsingar?.kaffi > 0 && (
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-600">Kaffi:</span>
-            <span className="text-sm text-gray-800">{record.upplýsingar.kaffi}</span>
-          </div>
-        )}
-
-        {(record.upplýsingar?.áfengi?.bjór > 0 || 
-          record.upplýsingar?.áfengi?.vín > 0 || 
-          record.upplýsingar?.áfengi?.annar > 0) && (
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-600">Áfengi:</span>
-            <span className="text-sm text-gray-800">
-              {(record.upplýsingar.áfengi.bjór || 0) + 
-               (record.upplýsingar.áfengi.vín || 0) + 
-               (record.upplýsingar.áfengi.annar || 0)}
-            </span>
-          </div>
-        )}
-
-        {record.upplýsingar?.æfing && (
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-600">Æfing:</span>
-            <span className="text-sm text-gray-800">
-              {record.upplýsingar.æfing.type}
-              {record.upplýsingar.æfing.type === 'labba' && record.upplýsingar.æfing.km && 
-                ` (${record.upplýsingar.æfing.km} km)`}
-            </span>
-          </div>
-        )}
-
-        {record.lát && record.lát.length > 0 && (
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-600">Lát:</span>
-            <span className="text-sm text-gray-800">{record.lát.length}</span>
-          </div>
-        )}
-
-        {record.lekar && record.lekar.length > 0 && (
-          <div className="mt-3 pt-3 border-t border-gray-200">
-            <div className="text-sm font-medium text-gray-600 mb-2">Lekar detallar:</div>
-            {record.lekar.slice(0, 3).map((leak, index) => (
-              <div key={index} className="text-xs text-gray-500 flex justify-between">
+      {record.lekar && record.lekar.length > 0 && (
+        <div className="mt-3 pt-3 border-t border-gray-200">
+          <div className="text-sm font-medium text-gray-600 mb-2">Lekar detallar:</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+            {record.lekar.slice(0, 6).map((leak, index) => (
+              <div key={index} className="text-xs text-gray-500 flex justify-between bg-white rounded px-2 py-1">
                 <span>{formatTime(leak.tími)}</span>
                 <span>Styrkur: {leak.styrkur}</span>
                 {leak.aðvarun && <span className="text-orange-600">⚠️</span>}
               </div>
             ))}
-            {record.lekar.length > 3 && (
-              <div className="text-xs text-gray-400 mt-1">
-                +{record.lekar.length - 3} fleiri...
-              </div>
-            )}
           </div>
-        )}
-
-        {record.athugasemd && (
-          <div className="mt-3 pt-3 border-t border-gray-200">
-            <div className="text-sm font-medium text-gray-600 mb-1">Athugasemd:</div>
-            <div className="text-sm text-gray-700 line-clamp-2">
-              {record.athugasemd}
+          {record.lekar.length > 6 && (
+            <div className="text-xs text-gray-400 mt-2">
+              +{record.lekar.length - 6} fleiri lekar...
             </div>
-          </div>
-        )}
-      </div>
-
-      {/* Status indicators */}
-      <div className="mt-4 pt-3 border-t border-gray-100 flex flex-wrap gap-2">
-        {record.upplýsingar?.sðl && (
-          <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">SÐL</span>
-        )}
-        {record.upplýsingar?.natft && (
-          <span className="px-2 py-1 text-xs bg-purple-100 text-purple-800 rounded-full">Natft</span>
-        )}
-        {record.upplýsingar?.bl && (
-          <span className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">BL</span>
-        )}
-        {record.upplýsingar?.pap && (
-          <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Pap</span>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
