@@ -230,9 +230,9 @@ const RecordForm = ({
           <h4 className="text-lg font-medium text-gray-700 mb-3">Tímar</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              ['lip-riv', 'Lip-riv'],
-              ['sið lio', 'Sið lio'],
+              ['sið lio', 'Sið Lio'],
               ['kvöldmatur', 'Kvöldmatur'],
+              ['lip-riv', 'Sið Lip-Riv'],
               ['sið lát', 'Sið lát'],
               ['að sofa', 'Að sofa']
             ].map(([key, label]) => (
