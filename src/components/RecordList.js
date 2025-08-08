@@ -94,11 +94,16 @@ const RecordList = ({
 
 const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
   const lekarCount = record['fjöldi leka'] || 0;
-  const bgColor = lekarCount === 0 ? 'bg-green-100 border-green-300' : 'bg-red-100 border-red-300';
+  const bgStyle = lekarCount === 0 
+    ? { backgroundColor: '#dcfce7', borderColor: '#86efac' } 
+    : { backgroundColor: '#fee2e2', borderColor: '#fca5a5' };
   const textColor = lekarCount === 0 ? 'text-green-800' : 'text-red-800';
   
   return (
-    <div className={`${bgColor} border rounded-lg p-4 hover:shadow-md transition-shadow`}>
+    <div 
+      className="border rounded-lg p-4 hover:shadow-md transition-shadow" 
+      style={bgStyle}
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6 flex-1">
           <div className="min-w-0">
