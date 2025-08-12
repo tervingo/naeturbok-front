@@ -94,10 +94,20 @@ const RecordList = ({
 
 const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
   const lekarCount = record['fjöldi leka'] || 0;
-  const bgStyle = lekarCount === 0 
-    ? { backgroundColor: 'limegreen', borderColor: '#86efac' } 
-    : { backgroundColor: 'lightsalmon', borderColor: '#fca5a5' };
-  const textColor = lekarCount === 0 ? 'text-green-800' : 'text-red-800';
+  const latCount = record.lát?.length || 0;
+  
+  let bgStyle, textColor;
+  
+  if (lekarCount === 0 && latCount === 1) {
+    bgStyle = { backgroundColor: 'aqua', borderColor: '#67e8f9' };
+    textColor = 'text-cyan-800';
+  } else if (lekarCount === 0) {
+    bgStyle = { backgroundColor: 'limegreen', borderColor: '#86efac' };
+    textColor = 'text-green-800';
+  } else {
+    bgStyle = { backgroundColor: 'lightsalmon', borderColor: '#fca5a5' };
+    textColor = 'text-red-800';
+  }
   
   return (
     <div 
