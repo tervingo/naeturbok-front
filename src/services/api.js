@@ -155,6 +155,36 @@ class ApiService {
     }));
     worksheet['!cols'] = colWidths;
 
+    // Apply row colors based on the same logic as RecordList
+    filteredRecords.forEach((record, index) => {
+      const lekarCount = record['fjöldi leka'] || 0;
+      const latCount = record.lát?.length || 0;
+      
+      let fillColor;
+      
+      if (lekarCount === 0 && latCount === 1) {
+        // Blue background for lekar = 0 and lát = 1
+        fillColor = { fgColor: { rgb: "00FFFF" } }; // aqua
+      } else if (lekarCount === 0) {
+        // Green background for lekar = 0 and lát > 1
+        fillColor = { fgColor: { rgb: "32FF32" } }; // limegreen
+      } else {
+        // Red background for lekar > 0
+        fillColor = { fgColor: { rgb: "FFA07A" } }; // lightsalmon
+      }
+      
+      // Apply color to entire row (skip header row, so add 1 to index)
+      const rowNum = index + 2;
+      const cols = Object.keys(excelData[0] || {});
+      
+      cols.forEach((col, colIndex) => {
+        const cellRef = XLSX.utils.encode_cell({ r: rowNum - 1, c: colIndex });
+        if (!worksheet[cellRef]) worksheet[cellRef] = {};
+        if (!worksheet[cellRef].s) worksheet[cellRef].s = {};
+        worksheet[cellRef].s.fill = fillColor;
+      });
+    });
+
     // Add worksheet to workbook
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Registros');
 
