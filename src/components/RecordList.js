@@ -96,6 +96,9 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
   const lekarCount = record['fjöldi leka'] || 0;
   const latCount = record.lát?.length || 0;
   
+  // Check if any lekar has styrkur > 1
+  const hasStrongLekar = record.lekar && record.lekar.some(leak => leak.styrkur > 1);
+  
   let bgStyle, textColor;
   
   if (lekarCount === 0 && latCount === 1) {
@@ -104,8 +107,17 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
   } else if (lekarCount === 0) {
     bgStyle = { backgroundColor: 'limegreen', borderColor: '#86efac' };
     textColor = 'text-green-800';
-  } else {
+  } else if (lekarCount === 1 && !hasStrongLekar) {
+    // 1 lekar with all styrkur = 1 (létt)
     bgStyle = { backgroundColor: 'lightsalmon', borderColor: '#fca5a5' };
+    textColor = 'text-red-800';
+  } else if (lekarCount > 2 || hasStrongLekar) {
+    // More than 2 lekar OR any lekar with styrkur > 1
+    bgStyle = { backgroundColor: 'tomato', borderColor: '#fca5a5' };
+    textColor = 'text-red-800';
+  } else {
+    // Default case (lekarCount = 2 with all styrkur = 1)
+    bgStyle = { backgroundColor: 'salmon', borderColor: '#fca5a5' };
     textColor = 'text-red-800';
   }
   
