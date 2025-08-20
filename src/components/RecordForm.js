@@ -388,13 +388,13 @@ const RecordForm = ({
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Flaedi</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Flaeði</label>
                 <select
                   value={lat.flaedi}
                   onChange={(e) => updateLát(index, 'flaedi', parseInt(e.target.value))}
                   className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value={0}>0 - Ekkert</option>
+                  <option value={0}>0 - Ekkert eða mjög lítið</option>
                   <option value={1}>1 - Miðlungs</option>
                   <option value={2}>2 - Mikið</option>
                 </select>
