@@ -101,7 +101,10 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
   
   let bgStyle, textColor;
   
-  if (lekarCount === 0 && latCount === 1) {
+  if (record.ready === false) {
+    bgStyle = { backgroundColor: 'slategray', borderColor: '#86efac' };
+    textColor = 'text-white';
+  } else if (lekarCount === 0 && latCount === 1) {
     bgStyle = { backgroundColor: 'aqua', borderColor: '#67e8f9' };
     textColor = 'text-cyan-800';
   } else if (lekarCount === 0) {

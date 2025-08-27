@@ -415,6 +415,22 @@ const RecordForm = ({
           className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
+
+      {/* Tilbúið */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <div className="flex-row items-stretch">
+          <input
+            type="checkbox"
+            id="ready"
+            checked={record.ready || false}
+            onChange={(e) => setRecord(prev => ({ ...prev, ready: e.target.checked }))}
+            className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+          />
+          <label htmlFor="ready" className="text-2xl font-bold text-red-800 cursor-pointer">
+            tilbúið?
+          </label>
+        </div>
+      </div>
     </div>
   );
 };

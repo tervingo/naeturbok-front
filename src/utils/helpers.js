@@ -36,7 +36,8 @@ export const formatDate = (dateStr) => {
     },
     lekar: [],
     lát: [],
-    athugasemd: ''
+    athugasemd: '',
+    ready: false
   });
   
   // Validar si un registro está completo
