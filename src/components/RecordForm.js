@@ -142,7 +142,7 @@ const RecordForm = ({
             <label className="block text-sm font-medium text-gray-700 mb-2">Hvar</label>
             <input
               type="text"
-              value={record.upplýsingar.hvar}
+              value={record.upplýsingar.hvar || 'Heima'}
               onChange={(e) => updateUpplýsingar('hvar', e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />

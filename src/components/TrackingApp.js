@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import RecordForm from './RecordForm';
 import RecordList from './RecordList';
 import Statistics from './Statistics';
-import WeatherComparison from './WeatherComparison';
 import ApiService from '../services/api';
 import { initializeRecord } from '../utils/helpers';
 
@@ -124,19 +123,6 @@ const TrackingApp = () => {
               >
                 Estadísticas
               </button>
-              <button
-                onClick={() => {
-                  setActiveTab('weather');
-                  setIsEditing(false);
-                }}
-                className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === 'weather'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Meteorología
-              </button>
             </nav>
           </div>
         </div>
@@ -166,10 +152,6 @@ const TrackingApp = () => {
         
         {activeTab === 'charts' && (
           <Statistics records={records} />
-        )}
-        
-        {activeTab === 'weather' && (
-          <WeatherComparison />
         )}
       </main>
 
