@@ -168,6 +168,7 @@ const RecordForm = ({
             >
               <option value="nej">nej</option>
               <option value="Dir">Dir</option>
+              <option value="Flor">Flor</option>
               <option value="labba">labba</option>
               <option value="annað">annað</option>
             </select>
