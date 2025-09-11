@@ -419,17 +419,31 @@ const RecordForm = ({
 
       {/* Tilbúið */}
       <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex-row items-stretch">
-          <input
-            type="checkbox"
-            id="ready"
-            checked={record.ready || false}
-            onChange={(e) => setRecord(prev => ({ ...prev, ready: e.target.checked }))}
-            className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-          />
-          <label htmlFor="ready" className="text-2xl font-bold text-red-800 cursor-pointer">
-            tilbúið?
-          </label>
+        <div className="flex items-center gap-8">
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="ready"
+              checked={record.ready || false}
+              onChange={(e) => setRecord(prev => ({ ...prev, ready: e.target.checked }))}
+              className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <label htmlFor="ready" className="text-2xl font-bold text-red-800 cursor-pointer ml-3">
+              tilbúið?
+            </label>
+          </div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="frábært"
+              checked={record.frábært || false}
+              onChange={(e) => setRecord(prev => ({ ...prev, frábært: e.target.checked }))}
+              className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <label htmlFor="frábært" className="text-lg font-bold text-yellow-600 cursor-pointer ml-3">
+              frábært
+            </label>
+          </div>
         </div>
       </div>
     </div>

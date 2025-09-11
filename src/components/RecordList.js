@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Download } from 'lucide-react';
+import { Plus, Edit, Trash2, Download, Star } from 'lucide-react';
 import ExportDialog from './ExportDialog';
 
 const RecordList = ({ 
@@ -131,10 +131,17 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6 flex-1">
-          <div className="min-w-0">
+          <div className="min-w-0 flex items-center gap-2">
             <h3 className="text-base font-semibold text-gray-200 truncate">
               {formatDate(record.date)}
             </h3>
+            {record.frábært && (
+              <Star 
+                size={16} 
+                className="text-yellow-400 fill-current" 
+                title="Frábært!" 
+              />
+            )}
           </div>
           
           <div className="flex items-center gap-1">
