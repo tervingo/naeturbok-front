@@ -104,11 +104,14 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
   if (record.ready === false) {
     bgStyle = { backgroundColor: 'slategray', borderColor: '#86efac' };
     textColor = 'text-white';
+  } else if (record.frábært === true) {
+    bgStyle = { backgroundColor: 'goldenrod', borderColor: '#86efac' };
+    textColor = 'text-white';
   } else if (lekarCount === 0 && latCount === 1) {
-    bgStyle = { backgroundColor: 'aqua', borderColor: '#67e8f9' };
+    bgStyle = { backgroundColor: 'chartreuse', borderColor: '#67e8f9' };
     textColor = 'text-cyan-800';
   } else if (lekarCount === 0) {
-    bgStyle = { backgroundColor: 'limegreen', borderColor: '#86efac' };
+    bgStyle = { backgroundColor: 'seagreen', borderColor: '#86efac' };
     textColor = 'text-green-800';
   } else if (lekarCount === 1 && !hasStrongLekar) {
     // 1 lekar with all styrkur = 1 (létt)
@@ -138,7 +141,7 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
             {record.frábært && (
               <Star 
                 size={16} 
-                className="text-yellow-400 fill-current" 
+                className="text-yellow-800 fill-current" 
                 title="Frábært!" 
               />
             )}
