@@ -104,10 +104,10 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
   if (record.ready === false) {
     bgStyle = { backgroundColor: 'slategray', borderColor: '#86efac' };
     textColor = 'text-white';
-  } else if (record.frábært === true) {
-    bgStyle = { backgroundColor: 'goldenrod', borderColor: '#86efac' };
+/*   } else if (record.frábært === true) {
+    bgStyle = { backgroundColor: 'darkturquoise', borderColor: '#86efac' };
     textColor = 'text-white';
-  } else if (lekarCount === 0 && latCount === 1) {
+ */  } else if (lekarCount === 0 && latCount === 1) {
     bgStyle = { backgroundColor: 'chartreuse', borderColor: '#67e8f9' };
     textColor = 'text-cyan-800';
   } else if (lekarCount === 0) {
@@ -135,16 +135,18 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6 flex-1">
           <div className="min-w-0 flex items-center gap-2">
+             {record.frábært && (
+              <span 
+                style={{ color: 'orangered', fontSize: '20px' }}
+                title="Frábært!" 
+              >
+                ★
+              </span>
+            )}
             <h3 className="text-base font-semibold text-gray-200 truncate">
               {formatDate(record.date)}
             </h3>
-            {record.frábært && (
-              <Star 
-                size={16} 
-                className="text-yellow-800 fill-current" 
-                title="Frábært!" 
-              />
-            )}
+
           </div>
           
           <div className="flex items-center gap-1">
@@ -153,6 +155,13 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
               {lekarCount}
             </span>
           </div>
+
+          {record.lát && record.lát.length > 0 && (
+            <div className="flex items-center gap-1">
+              <span className="text-sm text-gray-600">Lát:</span>
+              <span className="text-sm text-gray-800">{record.lát.length}</span>
+            </div>
+          )}
 
           {record.upplýsingar?.hvar && (
             <div className="flex items-center gap-1">
@@ -192,13 +201,6 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
             </div>
           )}
 
-          {record.lát && record.lát.length > 0 && (
-            <div className="flex items-center gap-1">
-              <span className="text-sm text-gray-600">Lát:</span>
-              <span className="text-sm text-gray-800">{record.lát.length}</span>
-            </div>
-          )}
-
           <div className="flex flex-wrap gap-1">
             {record.upplýsingar?.sðl && (
               <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">SÐL</span>
@@ -235,7 +237,7 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
         </div>
       </div>
 
-{/*       {record.athugasemd && (
+      {record.athugasemd && (
         <div className="mt-3 pt-3 border-t border-gray-200">
           <div className="text-sm text-gray-700">
             <strong>Athugasemd:</strong> {record.athugasemd}
@@ -262,7 +264,7 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
           )}
         </div>
       )}
-      */}
+
     </div>
   );
 };
