@@ -112,7 +112,7 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
     textColor = 'text-cyan-800';
   } else if (lekarCount === 0) {
     bgStyle = { backgroundColor: 'green', borderColor: '#86efac' };
-    textColor = 'text-green-800';
+    textColor = 'text-white';
   } else if (lekarCount === 1 && !hasStrongLekar) {
     // 1 lekar with all styrkur = 1 (létt)
     bgStyle = { backgroundColor: 'lightsalmon', borderColor: '#fca5a5' };
@@ -143,14 +143,14 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
                 ★
               </span>
             )}
-            <h3 className="text-base font-semibold text-gray-200 truncate">
+            <h3 className={`text-base font-semibold ${textColor === 'text-white' ? 'text-white' : 'text-gray-200'} truncate`}>
               {formatDate(record.date)}
             </h3>
 
           </div>
           
           <div className="flex items-center gap-1">
-            <span className="text-sm font-medium text-gray-600">Lekar:</span>
+            <span className={`text-sm font-medium ${textColor === 'text-white' ? 'text-white' : 'text-gray-600'}`}>Lekar:</span>
             <span className={`text-sm font-bold ${textColor}`}>
               {lekarCount}
             </span>
@@ -158,22 +158,22 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
 
           {record.lát && record.lát.length > 0 && (
             <div className="flex items-center gap-1">
-              <span className="text-sm text-gray-600">Lát:</span>
-              <span className="text-sm text-gray-800">{record.lát.length}</span>
+              <span className={`text-sm ${textColor === 'text-white' ? 'text-white' : 'text-gray-600'}`}>Lát:</span>
+              <span className={`text-sm ${textColor === 'text-white' ? 'text-white' : 'text-gray-800'}`}>{record.lát.length}</span>
             </div>
           )}
 
           {record.upplýsingar?.hvar && (
             <div className="flex items-center gap-1">
-              <span className="text-sm text-gray-600">Hvar:</span>
-              <span className="text-sm text-gray-800">{record.upplýsingar.hvar}</span>
+              <span className={`text-sm ${textColor === 'text-white' ? 'text-white' : 'text-gray-600'}`}>Hvar:</span>
+              <span className={`text-sm ${textColor === 'text-white' ? 'text-white' : 'text-gray-800'}`}>{record.upplýsingar.hvar}</span>
             </div>
           )}
 
           {record.upplýsingar?.kaffi > 0 && (
             <div className="flex items-center gap-1">
-              <span className="text-sm text-gray-600">Kaffi:</span>
-              <span className="text-sm text-gray-800">{record.upplýsingar.kaffi}</span>
+              <span className={`text-sm ${textColor === 'text-white' ? 'text-white' : 'text-gray-600'}`}>Kaffi:</span>
+              <span className={`text-sm ${textColor === 'text-white' ? 'text-white' : 'text-gray-800'}`}>{record.upplýsingar.kaffi}</span>
             </div>
           )}
 
@@ -181,8 +181,8 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
             record.upplýsingar?.áfengi?.vín > 0 || 
             record.upplýsingar?.áfengi?.annar > 0) && (
             <div className="flex items-center gap-1">
-              <span className="text-sm text-gray-600">Áfengi:</span>
-              <span className="text-sm text-gray-800">
+              <span className={`text-sm ${textColor === 'text-white' ? 'text-white' : 'text-gray-600'}`}>Áfengi:</span>
+              <span className={`text-sm ${textColor === 'text-white' ? 'text-white' : 'text-gray-800'}`}>
                 {(record.upplýsingar.áfengi.bjór || 0) + 
                  (record.upplýsingar.áfengi.vín || 0) + 
                  (record.upplýsingar.áfengi.annar || 0)}
@@ -192,8 +192,8 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
 
           {record.upplýsingar?.æfing && (
             <div className="flex items-center gap-1">
-              <span className="text-sm text-gray-600">Æfing:</span>
-              <span className="text-sm text-gray-800">
+              <span className={`text-sm ${textColor === 'text-white' ? 'text-white' : 'text-gray-600'}`}>Æfing:</span>
+              <span className={`text-sm ${textColor === 'text-white' ? 'text-white' : 'text-gray-800'}`}>
                 {record.upplýsingar.æfing.type}
                 {record.upplýsingar.æfing.type === 'labba' && record.upplýsingar.æfing.km && 
                   ` (${record.upplýsingar.æfing.km} km)`}
@@ -239,7 +239,7 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
 
       {record.athugasemd && (
         <div className="mt-3 pt-3 border-t border-gray-200">
-          <div className="text-sm text-gray-700">
+          <div className={`text-sm ${textColor === 'text-white' ? 'text-white' : 'text-gray-700'}`}>
             <strong>Athugasemd:</strong> {record.athugasemd}
           </div>
         </div>
