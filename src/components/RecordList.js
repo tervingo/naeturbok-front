@@ -203,16 +203,16 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
 
           <div className="flex flex-wrap gap-1">
             {record.upplýsingar?.sðl && (
-              <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">SÐL</span>
+              <span className={`px-2 py-1 text-xs rounded-full ${textColor === 'text-white' ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-800'}`}>SÐL</span>
             )}
             {record.upplýsingar?.natft && (
-              <span className="px-2 py-1 text-xs bg-purple-100 text-purple-800 rounded-full">Natft</span>
+              <span className={`px-2 py-1 text-xs rounded-full ${textColor === 'text-white' ? 'bg-purple-600 text-white' : 'bg-purple-100 text-purple-800'}`}>Natft</span>
             )}
             {record.upplýsingar?.bl && (
-              <span className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">BL</span>
+              <span className={`px-2 py-1 text-xs rounded-full ${textColor === 'text-white' ? 'bg-red-600 text-white' : 'bg-red-100 text-red-800'}`}>BL</span>
             )}
             {record.upplýsingar?.pap && (
-              <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Pap</span>
+              <span className={`px-2 py-1 text-xs rounded-full ${textColor === 'text-white' ? 'bg-gray-600 text-white' : 'bg-green-100 text-green-800'}`}>Pap</span>
             )}
           </div>
         </div>
