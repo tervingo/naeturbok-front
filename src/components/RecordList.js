@@ -104,10 +104,10 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
   if (record.ready === false) {
     bgStyle = { backgroundColor: 'slategray', borderColor: '#86efac' };
     textColor = 'text-white';
-/*   } else if (record.frábært === true) {
-    bgStyle = { backgroundColor: 'darkturquoise', borderColor: '#86efac' };
-    textColor = 'text-white';
- */  } else if (lekarCount === 0 && latCount === 1) {
+   } else if (lekarCount === 0 && latCount === 0)  {
+    bgStyle = { backgroundColor: 'aqua', borderColor: '#86efac' };
+    textColor = 'text-cyan-800';
+  } else if (lekarCount === 0 && latCount === 1) {
     bgStyle = { backgroundColor: 'chartreuse', borderColor: '#67e8f9' };
     textColor = 'text-cyan-800';
   } else if (lekarCount === 0) {
@@ -135,12 +135,12 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6 flex-1">
           <div className="min-w-0 flex items-center gap-2">
-             {record.frábært && (
-              <span 
-                style={{ color: 'orangered', fontSize: '20px' }}
-                title="Frábært!" 
+             {record.frábært > 0 && (
+              <span
+                style={{ color: '#facc15', fontSize: '16px' }}
+                title={`Frábært: ${record.frábært} stjörn${record.frábært === 1 ? 'a' : 'ur'}`}
               >
-                ★
+                {'★'.repeat(record.frábært)}
               </span>
             )}
             <h3 className={`text-base font-semibold ${textColor === 'text-white' ? 'text-white' : 'text-gray-200'} truncate`}>
