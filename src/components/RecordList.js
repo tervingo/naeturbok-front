@@ -113,6 +113,10 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
   } else if (lekarCount === 0) {
     bgStyle = { backgroundColor: 'green', borderColor: '#86efac' };
     textColor = 'text-white';
+  } else if (lekarCount === 1 && latCount === 1 && !hasStrongLekar) {
+    // 1 lekar with styrkur = 1 (létt) and 1 lát
+    bgStyle = { backgroundColor: 'bisque', borderColor: '#fca5a5' };
+    textColor = 'text-red-800';
   } else if (lekarCount === 1 && !hasStrongLekar) {
     // 1 lekar with all styrkur = 1 (létt)
     bgStyle = { backgroundColor: 'lightsalmon', borderColor: '#fca5a5' };
