@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Download } from 'lucide-react';
+import { Plus, Edit, Trash2, Download, BarChart3, TrendingUp } from 'lucide-react';
 import ExportDialog from './ExportDialog';
+import ChartDialog from './ChartDialog';
+import LineChartDialog from './LineChartDialog';
 
 const RecordList = ({ 
   records, 
@@ -10,6 +12,8 @@ const RecordList = ({
   onCreateNew 
 }) => {
   const [showExportDialog, setShowExportDialog] = useState(false);
+  const [showChartDialog, setShowChartDialog] = useState(false);
+  const [showLineChartDialog, setShowLineChartDialog] = useState(false);
 
   const formatDate = (dateStr) => {
     return new Date(dateStr).toLocaleDateString('is-IS', {
@@ -39,6 +43,22 @@ const RecordList = ({
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-800">Registros</h2>
         <div className="flex gap-2">
+          <button
+            onClick={() => setShowChartDialog(true)}
+            disabled={records.length === 0}
+            className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <BarChart3 size={16} />
+            Scatter
+          </button>
+          <button
+            onClick={() => setShowLineChartDialog(true)}
+            disabled={records.length === 0}
+            className="flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <TrendingUp size={16} />
+            Tendencia
+          </button>
           <button
             onClick={() => setShowExportDialog(true)}
             disabled={records.length === 0}
@@ -87,6 +107,18 @@ const RecordList = ({
         records={records}
         isOpen={showExportDialog}
         onClose={() => setShowExportDialog(false)}
+      />
+
+      <ChartDialog
+        records={records}
+        isOpen={showChartDialog}
+        onClose={() => setShowChartDialog(false)}
+      />
+
+      <LineChartDialog
+        records={records}
+        isOpen={showLineChartDialog}
+        onClose={() => setShowLineChartDialog(false)}
       />
     </div>
   );
