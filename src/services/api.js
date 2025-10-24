@@ -111,7 +111,8 @@ class ApiService {
         'Vino': record.upplýsingar?.áfengi?.vín || 0,
         'Otro alcohol': record.upplýsingar?.áfengi?.annar || 0,
         'SÐL': record.upplýsingar?.sðl ? 'Sí' : 'No',
-        'Lip-riv': record.upplýsingar?.['lip-riv'] || '',
+        'Sið Lip': record.upplýsingar?.['sið lip'] || '',
+        'Sið-Riv': record.upplýsingar?.['sið-riv'] || '',
         'Sið lio': record.upplýsingar?.['sið lio'] || '',
         'Cena': record.upplýsingar?.kvöldmatur || '',
         'Sið lát': record.upplýsingar?.['sið lát'] || '',
@@ -119,6 +120,7 @@ class ApiService {
         'Natft': record.upplýsingar?.natft ? 'Sí' : 'No',
         'BL': record.upplýsingar?.bl ? 'Sí' : 'No',
         'Pap': record.upplýsingar?.pap ? 'Sí' : 'No',
+        'Tamsul': record.upplýsingar?.tamsul ? 'Sí' : 'No',
         'Total Lekar': record.lekar?.length || 0,
         'Total Lát': record.lát?.length || 0,
         'Comentarios': record.athugasemd || ''

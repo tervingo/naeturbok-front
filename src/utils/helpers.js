@@ -25,14 +25,16 @@ export const formatDate = (dateStr) => {
       áfengi: { bjór: 0, vín: 0, annar: 0 },
       æfing: { type: 'nej', km: null },
       sðl: false,
-      'lip-riv': '',
+      'sið lip': '',
+      'sið-riv': '--:--',
       'sið lio': '',
       kvöldmatur: '',
       'sið lát': '',
       'að sofa': '',
       natft: false,
       bl: false,
-      pap: false
+      pap: false,
+      tamsul: false
     },
     lekar: [],
     lát: [],
