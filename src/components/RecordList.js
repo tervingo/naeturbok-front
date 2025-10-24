@@ -250,6 +250,9 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
             {record.upplýsingar?.pap && (
               <span className={`px-2 py-1 text-xs rounded-full ${textColor === 'text-white' ? 'bg-gray-600 text-white' : 'bg-green-100 text-green-800'}`}>Pap</span>
             )}
+            {record.upplýsingar?.tamsul && (
+              <span className={`px-2 py-1 text-xs rounded-full ${textColor === 'text-white' ? 'bg-orange-600 text-white' : 'bg-orange-100 text-orange-800'}`}>Tamsul</span>
+            )}
           </div>
         </div>
         

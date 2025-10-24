@@ -233,7 +233,8 @@ const RecordForm = ({
             {[
               ['sið lio', 'Sið Lio'],
               ['kvöldmatur', 'Kvöldmatur'],
-              ['lip-riv', 'Sið Lip-Riv'],
+              ['sið lip', 'Sið Lip'],
+              ['sið-riv', 'Sið-Riv'],
               ['sið lát', 'Sið lát'],
               ['að sofa', 'Að sofa']
             ].map(([key, label]) => (
@@ -258,7 +259,8 @@ const RecordForm = ({
               ['sðl', 'SÐL'],
               ['natft', 'Natft'],
               ['bl', 'BL'],
-              ['pap', 'Pap']
+              ['pap', 'Pap'],
+              ['tamsul', 'Tamsul']
             ].map(([key, label]) => (
               <label key={key} className="flex items-center space-x-2 cursor-pointer">
                 <input
