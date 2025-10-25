@@ -130,6 +130,7 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
   
   // Check if any lekar has styrkur > 1
   const hasStrongLekar = record.lekar && record.lekar.some(leak => leak.styrkur > 1);
+  const hasMjogLettLekar = record.lekar && record.lekar.some(leak => leak.styrkur === 0);
   
   let bgStyle, textColor;
   
@@ -145,6 +146,10 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
   } else if (lekarCount === 0) {
     bgStyle = { backgroundColor: 'green', borderColor: '#86efac' };
     textColor = 'text-white';
+  } else if (lekarCount === 1 && hasMjogLettLekar) {
+    // 1 lekar with styrkur = 0 (létt)
+    bgStyle = { backgroundColor: 'lavenderBlush', borderColor: '#fca5a5' };
+    textColor = 'text-red-800';
   } else if (lekarCount === 1 && latCount === 1 && !hasStrongLekar) {
     // 1 lekar with styrkur = 1 (létt) and 1 lát
     bgStyle = { backgroundColor: 'bisque', borderColor: '#fca5a5' };

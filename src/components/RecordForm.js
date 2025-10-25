@@ -319,6 +319,7 @@ const RecordForm = ({
                   onChange={(e) => updateLeak(index, 'styrkur', parseInt(e.target.value))}
                   className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
                 >
+                  <option value={0}>0 - Mjög létt</option>
                   <option value={1}>1 - Létt</option>
                   <option value={2}>2 - Miðlungs</option>
                   <option value={3}>3 - Sterkt</option>
