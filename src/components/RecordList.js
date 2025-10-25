@@ -179,6 +179,14 @@ const RecordBar = ({ record, onEdit, onDelete, formatDate, formatTime }) => {
                 {'★'.repeat(record.frábært)}
               </span>
             )}
+            {record.upplýsingar.tamsul === true && (
+              <span
+                style={{ color: 'blue', fontSize: '20px', fontWeight: 'bold' }}
+                title={`Tamsul: ${record.upplýsingar.tamsul}`}
+              >
+                {'T'.repeat(record.upplýsingar.tamsul)}
+              </span>
+             )}
             <h3 className={`text-base font-semibold ${textColor === 'text-white' ? 'text-white' : 'text-gray-200'} truncate`}>
               {formatDate(record.date)}
             </h3>
