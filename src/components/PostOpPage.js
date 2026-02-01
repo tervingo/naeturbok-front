@@ -8,14 +8,25 @@ const formatFecha = (fecha) => {
   if (!fecha) return '—';
   try {
     return new Date(fecha + 'T12:00:00').toLocaleDateString('es-ES', {
+      weekday: 'short',
       day: '2-digit',
-      month: '2-digit',
+      month: 'short',
       year: 'numeric',
     });
   } catch {
     return fecha;
   }
 };
+
+const escalasList = [
+  { key: 'or-gan', label: 'gan' },
+  { key: 'or-ur', label: 'ur' },
+  { key: 'or-ch', label: 'ch' },
+  { key: 'or-vol', label: 'vol' },
+  { key: 'or-mp', label: 'mp' },
+  { key: 'or-mlk', label: 'mlk' },
+  { key: 'or-spv', label: 'spv' },
+];
 
 const PostOpPage = () => {
   const [records, setRecords] = useState([]);
@@ -93,48 +104,75 @@ const PostOpPage = () => {
         </div>
       </header>
 
-      <main className="py-6 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {savedMessage && viewMode === 'list' && (
-          <div className="mb-4 p-3 bg-green-100 text-green-800 rounded-lg">
-            Registro guardado correctamente.
-          </div>
-        )}
+      <main className="py-8 px-4 sm:px-6 lg:px-8 min-h-screen bg-slate-50/60">
+        <div className="max-w-3xl mx-auto">
+          {savedMessage && viewMode === 'list' && (
+            <div className="mb-6 py-3 px-4 bg-emerald-50 text-emerald-800 rounded-xl text-sm font-medium border border-emerald-200/80">
+              Registro guardado correctamente.
+            </div>
+          )}
 
-        {viewMode === 'list' && (
-          <>
-            {listLoading ? (
-              <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-              </div>
-            ) : records.length === 0 ? (
-              <div className="bg-white rounded-lg shadow p-8 text-center text-gray-500">
-                No hay registros. Pulsa «Nuevo registro» para añadir uno.
-              </div>
-            ) : (
-              <div className="bg-white rounded-lg shadow overflow-hidden">
-                <ul className="divide-y divide-gray-200">
+          {viewMode === 'list' && (
+            <>
+              {listLoading ? (
+                <div className="flex items-center justify-center py-20">
+                  <div className="animate-spin rounded-full h-10 w-10 border-2 border-slate-300 border-t-blue-500" />
+                </div>
+              ) : records.length === 0 ? (
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-12 text-center">
+                  <p className="text-slate-500 font-medium">No hay registros</p>
+                  <p className="text-slate-400 text-sm mt-1">Pulsa «Nuevo registro» para añadir uno.</p>
+                </div>
+              ) : (
+                <ul className="space-y-4">
                   {records.map((r) => (
                     <li
                       key={r._id}
-                      className="px-4 py-3 sm:px-6 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm"
+                      className="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden hover:shadow-md hover:border-slate-300/80 transition-all duration-200"
                     >
-                      <span className="font-medium text-gray-900 whitespace-nowrap">
-                        {formatFecha(r.fecha)} {r.hora || ''}
-                      </span>
-                      <span className="text-gray-600 capitalize">
-                        {r.pos === 'depie' ? 'De pie' : r.pos === 'sentado' ? 'Sentado' : r.pos}
-                      </span>
-                      <span className="text-gray-500">
-                        or-gan:{r['or-gan'] ?? '—'} or-ur:{r['or-ur'] ?? '—'} or-ch:{r['or-ch'] ?? '—'} or-vol:{r['or-vol'] ?? '—'} or-mp:{r['or-mp'] ?? '—'} or-mlk:{r['or-mlk'] ?? '—'} or-spv:{r['or-spv'] ?? '—'}
-                      </span>
-                      <span className="text-gray-500">hec:{r.hec ?? '—'}</span>
+                      <div className="p-5 sm:p-6">
+                        <div className="flex flex-wrap items-baseline justify-between gap-3 mb-4">
+                          <div className="flex items-baseline gap-2">
+                            <time className="text-base font-semibold text-slate-800 tracking-tight">
+                              {formatFecha(r.fecha)}
+                            </time>
+                            <span className="text-base font-semibold text-slate-700 tabular-nums">
+                              {r.hora || '—'}
+                            </span>
+                          </div>
+                          <span
+                            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                              r.pos === 'depie'
+                                ? 'bg-amber-100 text-amber-800'
+                                : 'bg-sky-100 text-sky-800'
+                            }`}
+                          >
+                            {r.pos === 'depie' ? 'De pie' : r.pos === 'sentado' ? 'Sentado' : r.pos}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2 text-sm">
+                          {escalasList.map(({ key, label }) => (
+                            <div key={key} className="flex items-center gap-2">
+                              <span className="text-slate-400 font-medium">{label}</span>
+                              <span className="text-slate-700 font-semibold tabular-nums">
+                                {r[key] ?? '—'}
+                              </span>
+                            </div>
+                          ))}
+                          <div className="flex items-center gap-2 col-span-2 sm:col-span-4">
+                            <span className="text-slate-400 font-medium">hec</span>
+                            <span className="text-slate-700 font-semibold tabular-nums">
+                              {r.hec ?? '—'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </li>
                   ))}
                 </ul>
-              </div>
-            )}
-          </>
-        )}
+              )}
+            </>
+          )}
 
         {viewMode === 'form' && (
           <PostOpForm
@@ -145,6 +183,7 @@ const PostOpPage = () => {
             loading={saveLoading}
           />
         )}
+        </div>
       </main>
 
       {saveLoading && (
