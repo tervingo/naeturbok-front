@@ -86,14 +86,14 @@ const PostOpForm = ({ data, setData, onSave, onCancel, loading, isEditing }) => 
         <h3 className="text-lg font-semibold text-gray-800">Escalas (or-*)</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">or-gan (0–2)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">or-gan (0 | 0,5 | 1 | 2)</label>
             <select
-              value={data['or-gan'] ?? 0}
-              onChange={(e) => update('or-gan', parseInt(e.target.value, 10))}
+              value={String(data['or-gan'] ?? 0)}
+              onChange={(e) => update('or-gan', parseFloat(e.target.value))}
               className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
-              {[0, 1, 2].map((n) => (
-                <option key={n} value={n}>{n}</option>
+              {[0, 0.5, 1, 2].map((n) => (
+                <option key={n} value={n}>{Number.isInteger(n) ? n : n.toFixed(1).replace('.', ',')}</option>
               ))}
             </select>
           </div>
