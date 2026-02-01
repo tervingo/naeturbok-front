@@ -104,6 +104,15 @@ class ApiService {
     });
   }
 
+  async updatePostop(id, data) {
+    const { _id, ...clean } = data;
+    if (clean['or-mp'] === 'no') delete clean['mp-por'];
+    return this.request(`/postop/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(clean),
+    });
+  }
+
   async exportToExcel(records, startDate = null, endDate = null) {
     // Import xlsx dynamically to avoid bundle size issues
     const XLSX = await import('xlsx');

@@ -16,7 +16,7 @@ const initialPostOp = () => ({
   hec: 0,
 });
 
-const PostOpForm = ({ data, setData, onSave, onCancel, loading }) => {
+const PostOpForm = ({ data, setData, onSave, onCancel, loading, isEditing }) => {
   const update = (field, value) => {
     setData((prev) => ({ ...prev, [field]: value }));
   };
@@ -24,7 +24,9 @@ const PostOpForm = ({ data, setData, onSave, onCancel, loading }) => {
   return (
     <div className="max-w-2xl mx-auto p-4 space-y-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">Nuevo registro PostOp</h2>
+        <h2 className="text-2xl font-bold text-gray-800">
+          {isEditing ? 'Editar registro PostOp' : 'Nuevo registro PostOp'}
+        </h2>
         <div className="flex gap-2">
           <button
             onClick={onSave}

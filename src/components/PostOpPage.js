@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PostOpForm, { initialPostOp } from './PostOpForm';
 import ApiService from '../services/api';
-import { ArrowLeft, Plus } from 'lucide-react';
+import { ArrowLeft, Plus, Pencil } from 'lucide-react';
 
 const formatFecha = (fecha) => {
   if (!fecha) return '—';
@@ -63,6 +63,7 @@ const PostOpPage = () => {
   const [listLoading, setListLoading] = useState(true);
   const [viewMode, setViewMode] = useState('list'); // 'list' | 'form'
   const [formData, setFormData] = useState(initialPostOp());
+  const [editingId, setEditingId] = useState(null);
   const [saveLoading, setSaveLoading] = useState(false);
   const [savedMessage, setSavedMessage] = useState(false);
 
@@ -86,10 +87,13 @@ const PostOpPage = () => {
     setSaveLoading(true);
     setSavedMessage(false);
     try {
-      const res = await ApiService.createPostop(formData);
+      const res = editingId
+        ? await ApiService.updatePostop(editingId, formData)
+        : await ApiService.createPostop(formData);
       if (res.success) {
         setSavedMessage(true);
         setFormData(initialPostOp());
+        setEditingId(null);
         setViewMode('list');
         fetchRecords();
       }
@@ -102,7 +106,14 @@ const PostOpPage = () => {
 
   const handleCancel = () => {
     setFormData(initialPostOp());
+    setEditingId(null);
     setViewMode('list');
+  };
+
+  const handleEdit = (record) => {
+    setFormData({ ...initialPostOp(), ...record });
+    setEditingId(record._id);
+    setViewMode('form');
   };
 
   return (
@@ -170,15 +181,25 @@ const PostOpPage = () => {
                               {r.hora || '—'}
                             </span>
                           </div>
-                          <span
-                            className={`inline-flex items-center px-3 py-1 rounded-full text-lg font-medium ${
-                              r.pos === 'depie'
-                                ? 'bg-amber-100 text-amber-800'
-                                : 'bg-sky-100 text-sky-800'
-                            }`}
-                          >
-                            {r.pos === 'depie' ? 'De pie' : r.pos === 'sentado' ? 'Sentado' : r.pos}
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={`inline-flex items-center px-3 py-1 rounded-full text-lg font-medium ${
+                                r.pos === 'depie'
+                                  ? 'bg-amber-100 text-amber-800'
+                                  : 'bg-sky-100 text-sky-800'
+                              }`}
+                            >
+                              {r.pos === 'depie' ? 'De pie' : r.pos === 'sentado' ? 'Sentado' : r.pos}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleEdit(r)}
+                              className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+                              title="Editar"
+                            >
+                              <Pencil size={20} />
+                            </button>
+                          </div>
                         </div>
                         <div className="flex flex-wrap gap-3">
                           {escalasZonas.map((zona) => (
@@ -224,6 +245,7 @@ const PostOpPage = () => {
             onSave={handleSave}
             onCancel={handleCancel}
             loading={saveLoading}
+            isEditing={!!editingId}
           />
         )}
         </div>
