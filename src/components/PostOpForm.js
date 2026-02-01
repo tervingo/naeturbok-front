@@ -110,26 +110,26 @@ const PostOpForm = ({ data, setData, onSave, onCancel, loading, isEditing }) => 
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">or-ch (0–3)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">or-ch (0 | 0,5 | 1 | 1,5 | 2 | 3)</label>
             <select
-              value={data['or-ch'] ?? 0}
-              onChange={(e) => update('or-ch', parseInt(e.target.value, 10))}
+              value={String(data['or-ch'] ?? 0)}
+              onChange={(e) => update('or-ch', parseFloat(e.target.value))}
               className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
-              {[0, 1, 2, 3].map((n) => (
-                <option key={n} value={n}>{n}</option>
+              {[0, 0.5, 1, 1.5, 2, 3].map((n) => (
+                <option key={n} value={n}>{Number.isInteger(n) ? n : n.toFixed(1).replace('.', ',')}</option>
               ))}
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">or-vol (0–3)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">or-vol (0 | 0,5 | 1 | 1,5 | 2 | 3)</label>
             <select
-              value={data['or-vol'] ?? 0}
-              onChange={(e) => update('or-vol', parseInt(e.target.value, 10))}
+              value={String(data['or-vol'] ?? 0)}
+              onChange={(e) => update('or-vol', parseFloat(e.target.value))}
               className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
-              {[0, 1, 2, 3].map((n) => (
-                <option key={n} value={n}>{n}</option>
+              {[0, 0.5, 1, 1.5, 2, 3].map((n) => (
+                <option key={n} value={n}>{Number.isInteger(n) ? n : n.toFixed(1).replace('.', ',')}</option>
               ))}
             </select>
           </div>
