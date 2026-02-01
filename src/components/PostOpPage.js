@@ -46,7 +46,10 @@ const escalasZonas = [
   {
     label: 'mp',
     bg: 'bg-violet-50 border-violet-200/60',
-    fields: [{ key: 'or-mp', label: 'mp' }],
+    fields: [
+      { key: 'or-mp', label: 'mp' },
+      { key: 'mp-por', label: 'por', onlyWhen: 'or-mp' },
+    ],
   },
   {
     label: 'hec',
@@ -184,19 +187,24 @@ const PostOpPage = () => {
                               className={`rounded-lg border px-4 py-2.5 text-lg ${zona.bg}`}
                             >
                               <div className="flex flex-wrap items-center gap-y-2">
-                                {zona.fields.map(({ key, label }, idx) => (
-                                  <React.Fragment key={key}>
-                                    {idx > 0 && (
-                                      <span className="text-slate-400 font-light" aria-hidden> - </span>
-                                    )}
-                                    <div className="flex items-baseline gap-2">
-                                      <span className="text-slate-500 font-medium">{label}</span>
-                                      <span className="font-semibold tabular-nums text-slate-800 min-w-[1.25rem]">
-                                        {r[key] ?? '—'}
-                                      </span>
-                                    </div>
-                                  </React.Fragment>
-                                ))}
+                                {zona.fields
+                                  .filter(
+                                    (f) =>
+                                      !f.onlyWhen || (r[f.onlyWhen] !== 'no' && r[f.onlyWhen] !== undefined)
+                                  )
+                                  .map(({ key, label }, idx) => (
+                                    <React.Fragment key={key}>
+                                      {idx > 0 && (
+                                        <span className="text-slate-400 font-light" aria-hidden> - </span>
+                                      )}
+                                      <div className="flex items-baseline gap-2">
+                                        <span className="text-slate-500 font-medium">{label}</span>
+                                        <span className="font-semibold tabular-nums text-slate-800 min-w-[1.25rem]">
+                                          {r[key] ?? '—'}
+                                        </span>
+                                      </div>
+                                    </React.Fragment>
+                                  ))}
                               </div>
                             </div>
                           ))}

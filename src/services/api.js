@@ -97,6 +97,7 @@ class ApiService {
 
   async createPostop(data) {
     const { _id, ...clean } = data;
+    if (clean['or-mp'] === 'no') delete clean['mp-por'];
     return this.request('/postop', {
       method: 'POST',
       body: JSON.stringify(clean),

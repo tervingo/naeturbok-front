@@ -9,7 +9,8 @@ const initialPostOp = () => ({
   'or-ur': 0,
   'or-ch': 0,
   'or-vol': 0,
-  'or-mp': 0,
+  'or-mp': 'no',
+  'mp-por': '',
   'or-mlk': 0,
   'or-spv': 0,
   hec: 0,
@@ -131,17 +132,38 @@ const PostOpForm = ({ data, setData, onSave, onCancel, loading }) => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">or-mp (0–2)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">or-mp</label>
             <select
-              value={data['or-mp'] ?? 0}
-              onChange={(e) => update('or-mp', parseInt(e.target.value, 10))}
+              value={data['or-mp'] ?? 'no'}
+              onChange={(e) => {
+                const v = e.target.value;
+                update('or-mp', v === 'no' ? 'no' : parseInt(v, 10));
+                if (v === 'no') update('mp-por', '');
+              }}
               className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
+              <option value="no">no</option>
               {[0, 1, 2].map((n) => (
                 <option key={n} value={n}>{n}</option>
               ))}
             </select>
           </div>
+          {(data['or-mp'] !== 'no' && data['or-mp'] !== undefined && data['or-mp'] !== '') && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">mp-por</label>
+              <select
+                value={data['mp-por'] ?? 'nada'}
+                onChange={(e) => update('mp-por', e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="tos">tos</option>
+                <option value="estornudo">estornudo</option>
+                <option value="esfuerzo">esfuerzo</option>
+                <option value="otro">otro</option>
+                <option value="nada">nada</option>
+              </select>
+            </div>
+          )}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">or-mlk (0–10)</label>
             <select
