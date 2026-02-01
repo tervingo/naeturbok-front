@@ -21,18 +21,28 @@ const LineChartDialog = ({ records, isOpen, onClose }) => {
         dailyCounts[recordDate] = {
           date: recordDate,
           lát: 0,
-          lekar: 0
+          lekar: 0,
+          látIntensitySum: 0,
+          lekarIntensitySum: 0,
+          látAvgIntensity: 0,
+          lekarAvgIntensity: 0
         };
       }
 
-      // Count lát events
+      // Count lát events and calculate average flaedi
       if (record.lát && record.lát.length > 0) {
         dailyCounts[recordDate].lát = record.lát.length;
+        const totalFlaedi = record.lát.reduce((sum, lat) => sum + (lat.flaedi || 0), 0);
+        dailyCounts[recordDate].látIntensitySum = totalFlaedi;
+        dailyCounts[recordDate].látAvgIntensity = totalFlaedi / record.lát.length;
       }
 
-      // Count lekar events
+      // Count lekar events and calculate average styrkur
       if (record.lekar && record.lekar.length > 0) {
         dailyCounts[recordDate].lekar = record.lekar.length;
+        const totalStyrkur = record.lekar.reduce((sum, leak) => sum + (leak.styrkur !== undefined ? leak.styrkur : 1), 0);
+        dailyCounts[recordDate].lekarIntensitySum = totalStyrkur;
+        dailyCounts[recordDate].lekarAvgIntensity = totalStyrkur / record.lekar.length;
       }
     });
 
@@ -48,11 +58,22 @@ const LineChartDialog = ({ records, isOpen, onClose }) => {
       return (
         <div className="bg-white p-3 border border-gray-300 rounded shadow-lg">
           <p className="font-medium">{new Date(label).toLocaleDateString('es-ES')}</p>
-          {payload.map((entry, index) => (
-            <p key={index} className="text-sm" style={{ color: entry.color }}>
-              {entry.name}: {entry.value} eventos
-            </p>
-          ))}
+          {payload.map((entry, index) => {
+            const data = chartData.find(d => d.date === label);
+            const avgIntensity = entry.name === 'Lát' ? data?.látAvgIntensity : data?.lekarAvgIntensity;
+            return (
+              <div key={index}>
+                <p className="text-sm" style={{ color: entry.color }}>
+                  {entry.name}: {entry.value} eventos
+                </p>
+                {avgIntensity !== undefined && (
+                  <p className="text-xs text-gray-600">
+                    Intensidad promedio: {avgIntensity.toFixed(2)}
+                  </p>
+                )}
+              </div>
+            );
+          })}
         </div>
       );
     }
@@ -70,6 +91,27 @@ const LineChartDialog = ({ records, isOpen, onClose }) => {
     ...chartData.map(d => Math.max(d.lát, d.lekar)),
     5 // minimum scale
   );
+
+  // Custom dot renderer that varies size based on average intensity
+  const renderCustomDot = (props, intensityKey, maxIntensity) => {
+    const { cx, cy, payload } = props;
+    if (cx === undefined || cy === undefined) return null;
+
+    const intensity = payload[intensityKey] || 0;
+    // Map intensity to radius: 0->3, max->10
+    const radius = 3 + (intensity / maxIntensity) * 7;
+
+    return (
+      <circle
+        cx={cx}
+        cy={cy}
+        r={radius}
+        fill={props.fill}
+        stroke={props.stroke}
+        strokeWidth={2}
+      />
+    );
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -99,11 +141,11 @@ const LineChartDialog = ({ records, isOpen, onClose }) => {
               <div className="flex items-center gap-6 text-sm">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-1 bg-green-500"></div>
-                  <span>Lát (eventos por día)</span>
+                  <span>Lát (tamaño del punto = intensidad promedio flaedi)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-1 bg-red-500"></div>
-                  <span>Lekar (eventos por día)</span>
+                  <span>Lekar (tamaño del punto = intensidad promedio styrkur)</span>
                 </div>
               </div>
 
@@ -128,23 +170,23 @@ const LineChartDialog = ({ records, isOpen, onClose }) => {
                     <Tooltip content={<CustomTooltip />} />
                     <Legend />
 
-                    {/* Green line for lát */}
+                    {/* Green line for lát with variable dot size based on average flaedi */}
                     <Line
                       type="monotone"
                       dataKey="lát"
                       stroke="#22c55e"
                       strokeWidth={2}
-                      dot={{ fill: '#22c55e', strokeWidth: 2, r: 4 }}
+                      dot={(props) => renderCustomDot(props, 'látAvgIntensity', 2)}
                       name="Lát"
                     />
 
-                    {/* Red line for lekar */}
+                    {/* Red line for lekar with variable dot size based on average styrkur */}
                     <Line
                       type="monotone"
                       dataKey="lekar"
                       stroke="#ef4444"
                       strokeWidth={2}
-                      dot={{ fill: '#ef4444', strokeWidth: 2, r: 4 }}
+                      dot={(props) => renderCustomDot(props, 'lekarAvgIntensity', 3)}
                       name="Lekar"
                     />
                   </LineChart>
@@ -157,6 +199,12 @@ const LineChartDialog = ({ records, isOpen, onClose }) => {
                 <p>
                   Total lát: {chartData.reduce((sum, d) => sum + d.lát, 0)} •
                   Total lekar: {chartData.reduce((sum, d) => sum + d.lekar, 0)}
+                </p>
+                <p className="mt-1 font-medium">
+                  El tamaño de cada punto en la línea representa la intensidad promedio del día
+                </p>
+                <p className="text-xs">
+                  Lát: flaedi promedio (0=pequeño, 2=grande) • Lekar: styrkur promedio (0=muy pequeño, 3=grande)
                 </p>
               </div>
             </div>

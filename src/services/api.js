@@ -85,6 +85,24 @@ class ApiService {
     return this.request('/health');
   }
 
+  // PostOp endpoints
+  async getPostopList(startDate = null, endDate = null) {
+    let endpoint = '/postop';
+    const params = new URLSearchParams();
+    if (startDate) params.append('start_date', startDate);
+    if (endDate) params.append('end_date', endDate);
+    if (params.toString()) endpoint += `?${params.toString()}`;
+    return this.request(endpoint);
+  }
+
+  async createPostop(data) {
+    const { _id, ...clean } = data;
+    return this.request('/postop', {
+      method: 'POST',
+      body: JSON.stringify(clean),
+    });
+  }
+
   async exportToExcel(records, startDate = null, endDate = null) {
     // Import xlsx dynamically to avoid bundle size issues
     const XLSX = await import('xlsx');

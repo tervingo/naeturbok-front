@@ -1,0 +1,189 @@
+import React from 'react';
+import { Save, X } from 'lucide-react';
+
+const initialPostOp = () => ({
+  fecha: new Date().toISOString().slice(0, 10),
+  hora: new Date().toTimeString().slice(0, 5),
+  pos: 'depie',
+  'or-gan': 0,
+  'or-ur': 0,
+  'or-ch': 0,
+  'or-vol': 0,
+  'or-mp': 0,
+  'or-mlk': 0,
+  'or-spv': 0,
+  hec: 0,
+});
+
+const PostOpForm = ({ data, setData, onSave, onCancel, loading }) => {
+  const update = (field, value) => {
+    setData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto p-4 space-y-6">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold text-gray-800">Nuevo registro PostOp</h2>
+        <div className="flex gap-2">
+          <button
+            onClick={onSave}
+            disabled={loading}
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+          >
+            <Save size={16} />
+            Guardar
+          </button>
+          <button
+            onClick={onCancel}
+            className="flex items-center gap-2 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+          >
+            <X size={16} />
+            Cancelar
+          </button>
+        </div>
+      </div>
+
+      {/* Fecha y hora */}
+      <div className="bg-white rounded-lg shadow p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Fecha</label>
+          <input
+            type="date"
+            value={data.fecha || ''}
+            onChange={(e) => update('fecha', e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Hora (local)</label>
+          <input
+            type="time"
+            value={data.hora || ''}
+            onChange={(e) => update('hora', e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+      </div>
+
+      {/* Posición */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <label className="block text-sm font-medium text-gray-700 mb-2">Posición (pos)</label>
+        <select
+          value={data.pos || 'depie'}
+          onChange={(e) => update('pos', e.target.value)}
+          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        >
+          <option value="depie">De pie</option>
+          <option value="sentado">Sentado</option>
+        </select>
+      </div>
+
+      {/* Escalas or-* (0-2, 0-3, 0-10) */}
+      <div className="bg-white rounded-lg shadow p-6 space-y-4">
+        <h3 className="text-lg font-semibold text-gray-800">Escalas (or-*)</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">or-gan (0–2)</label>
+            <select
+              value={data['or-gan'] ?? 0}
+              onChange={(e) => update('or-gan', parseInt(e.target.value, 10))}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+              {[0, 1, 2].map((n) => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">or-ur (0–2)</label>
+            <select
+              value={data['or-ur'] ?? 0}
+              onChange={(e) => update('or-ur', parseInt(e.target.value, 10))}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+              {[0, 1, 2].map((n) => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">or-ch (0–3)</label>
+            <select
+              value={data['or-ch'] ?? 0}
+              onChange={(e) => update('or-ch', parseInt(e.target.value, 10))}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+              {[0, 1, 2, 3].map((n) => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">or-vol (0–3)</label>
+            <select
+              value={data['or-vol'] ?? 0}
+              onChange={(e) => update('or-vol', parseInt(e.target.value, 10))}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+              {[0, 1, 2, 3].map((n) => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">or-mp (0–2)</label>
+            <select
+              value={data['or-mp'] ?? 0}
+              onChange={(e) => update('or-mp', parseInt(e.target.value, 10))}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+              {[0, 1, 2].map((n) => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">or-mlk (0–10)</label>
+            <select
+              value={data['or-mlk'] ?? 0}
+              onChange={(e) => update('or-mlk', parseInt(e.target.value, 10))}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+              {Array.from({ length: 11 }, (_, i) => i).map((n) => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">or-spv (0–10)</label>
+            <select
+              value={data['or-spv'] ?? 0}
+              onChange={(e) => update('or-spv', parseInt(e.target.value, 10))}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+              {Array.from({ length: 11 }, (_, i) => i).map((n) => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* hec */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <label className="block text-sm font-medium text-gray-700 mb-2">hec (0 | 1)</label>
+        <select
+          value={data.hec ?? 0}
+          onChange={(e) => update('hec', parseInt(e.target.value, 10))}
+          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        >
+          <option value={0}>0</option>
+          <option value={1}>1</option>
+        </select>
+      </div>
+    </div>
+  );
+};
+
+export default PostOpForm;
+export { initialPostOp };
