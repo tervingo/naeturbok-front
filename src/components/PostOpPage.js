@@ -18,14 +18,41 @@ const formatFecha = (fecha) => {
   }
 };
 
-const escalasList = [
-  { key: 'or-gan', label: 'gan' },
-  { key: 'or-ur', label: 'ur' },
-  { key: 'or-ch', label: 'ch' },
-  { key: 'or-vol', label: 'vol' },
-  { key: 'or-mp', label: 'mp' },
-  { key: 'or-mlk', label: 'mlk' },
-  { key: 'or-spv', label: 'spv' },
+const escalasZonas = [
+  {
+    label: 'gan + ur',
+    bg: 'bg-amber-50 border-amber-200/60',
+    fields: [
+      { key: 'or-gan', label: 'gan' },
+      { key: 'or-ur', label: 'ur' },
+    ],
+  },
+  {
+    label: 'ch + vol',
+    bg: 'bg-sky-50 border-sky-200/60',
+    fields: [
+      { key: 'or-ch', label: 'ch' },
+      { key: 'or-vol', label: 'vol' },
+    ],
+  },
+  {
+    label: 'mlk + spv',
+    bg: 'bg-emerald-50 border-emerald-200/60',
+    fields: [
+      { key: 'or-mlk', label: 'mlk' },
+      { key: 'or-spv', label: 'spv' },
+    ],
+  },
+  {
+    label: 'mp',
+    bg: 'bg-violet-50 border-violet-200/60',
+    fields: [{ key: 'or-mp', label: 'mp' }],
+  },
+  {
+    label: 'hec',
+    bg: 'bg-slate-100 border-slate-200/80',
+    fields: [{ key: 'hec', label: 'hec' }],
+  },
 ];
 
 const PostOpPage = () => {
@@ -133,10 +160,10 @@ const PostOpPage = () => {
                       <div className="p-5 sm:p-6">
                         <div className="flex flex-wrap items-baseline justify-between gap-3 mb-4">
                           <div className="flex items-baseline gap-2">
-                            <time className="text-base font-semibold text-slate-800 tracking-tight">
+                            <time className="text-lg font-semibold text-slate-800 tracking-tight">
                               {formatFecha(r.fecha)}
                             </time>
-                            <span className="text-base font-semibold text-slate-700 tabular-nums">
+                            <span className="text-lg font-semibold text-slate-700 tabular-nums">
                               {r.hora || '—'}
                             </span>
                           </div>
@@ -150,21 +177,29 @@ const PostOpPage = () => {
                             {r.pos === 'depie' ? 'De pie' : r.pos === 'sentado' ? 'Sentado' : r.pos}
                           </span>
                         </div>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2 text-sm">
-                          {escalasList.map(({ key, label }) => (
-                            <div key={key} className="flex items-center gap-2">
-                              <span className="text-slate-400 font-medium">{label}</span>
-                              <span className="text-slate-700 font-semibold tabular-nums">
-                                {r[key] ?? '—'}
-                              </span>
+                        <div className="flex flex-wrap gap-3">
+                          {escalasZonas.map((zona) => (
+                            <div
+                              key={zona.label}
+                              className={`rounded-lg border px-4 py-2.5 text-base ${zona.bg}`}
+                            >
+                              <div className="flex flex-wrap items-center gap-y-2">
+                                {zona.fields.map(({ key, label }, idx) => (
+                                  <React.Fragment key={key}>
+                                    {idx > 0 && (
+                                      <span className="text-slate-400 font-light" aria-hidden> - </span>
+                                    )}
+                                    <div className="flex items-baseline gap-2">
+                                      <span className="text-slate-500 font-medium">{label}</span>
+                                      <span className="font-semibold tabular-nums text-slate-800 min-w-[1.25rem]">
+                                        {r[key] ?? '—'}
+                                      </span>
+                                    </div>
+                                  </React.Fragment>
+                                ))}
+                              </div>
                             </div>
                           ))}
-                          <div className="flex items-center gap-2 col-span-2 sm:col-span-4">
-                            <span className="text-slate-400 font-medium">hec</span>
-                            <span className="text-slate-700 font-semibold tabular-nums">
-                              {r.hec ?? '—'}
-                            </span>
-                          </div>
                         </div>
                       </div>
                     </li>
