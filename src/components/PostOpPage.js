@@ -160,15 +160,15 @@ const PostOpPage = () => {
                       <div className="p-5 sm:p-6">
                         <div className="flex flex-wrap items-baseline justify-between gap-3 mb-4">
                           <div className="flex items-baseline gap-2">
-                            <time className="text-lg font-semibold text-slate-800 tracking-tight">
+                            <time className="text-xl font-semibold text-slate-800 tracking-tight">
                               {formatFecha(r.fecha)}
                             </time>
-                            <span className="text-lg font-semibold text-slate-700 tabular-nums">
+                            <span className="text-xl font-semibold text-slate-700 tabular-nums">
                               {r.hora || '—'}
                             </span>
                           </div>
                           <span
-                            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                            className={`inline-flex items-center px-3 py-1 rounded-full text-lg font-medium ${
                               r.pos === 'depie'
                                 ? 'bg-amber-100 text-amber-800'
                                 : 'bg-sky-100 text-sky-800'
@@ -181,7 +181,7 @@ const PostOpPage = () => {
                           {escalasZonas.map((zona) => (
                             <div
                               key={zona.label}
-                              className={`rounded-lg border px-4 py-2.5 text-base ${zona.bg}`}
+                              className={`rounded-lg border px-4 py-2.5 text-lg ${zona.bg}`}
                             >
                               <div className="flex flex-wrap items-center gap-y-2">
                                 {zona.fields.map(({ key, label }, idx) => (
