@@ -56,6 +56,7 @@ const escalasZonas = [
     bg: 'bg-rose-50 border-rose-200/60',
     fields: [
       { key: 'ingesta', label: 'ingesta' },
+      { key: 'ingesta-cantidad', label: 'cantidad', onlyWhen: 'ingesta' },
       { key: 'medicación', label: 'medicación' },
     ],
   },

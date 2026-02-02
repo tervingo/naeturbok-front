@@ -15,6 +15,7 @@ const initialPostOp = () => ({
   'or-spv': 0,
   hec: 0,
   ingesta: '',
+  'ingesta-cantidad': '',
   medicación: '',
 });
 
@@ -203,7 +204,11 @@ const PostOpForm = ({ data, setData, onSave, onCancel, loading, isEditing }) => 
             <label className="block text-sm font-medium text-gray-700 mb-2">Ingesta</label>
             <select
               value={data.ingesta ?? ''}
-              onChange={(e) => update('ingesta', e.target.value)}
+              onChange={(e) => {
+                const v = e.target.value;
+                update('ingesta', v);
+                if (!v) update('ingesta-cantidad', '');
+              }}
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">—</option>
@@ -215,6 +220,22 @@ const PostOpForm = ({ data, setData, onSave, onCancel, loading, isEditing }) => 
               <option value="otros">otros</option>
             </select>
           </div>
+          {data.ingesta && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Cantidad</label>
+              <select
+                value={data['ingesta-cantidad'] ?? ''}
+                onChange={(e) => update('ingesta-cantidad', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">—</option>
+                {[100, 200, 300, 400, 500, 600, 700, 800, 900].map((n) => (
+                  <option key={n} value={`${n} ml`}>{n} ml</option>
+                ))}
+                <option value="1l">1 l</option>
+              </select>
+            </div>
+          )}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Medicación</label>
             <select
