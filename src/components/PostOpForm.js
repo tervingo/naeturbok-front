@@ -13,6 +13,7 @@ const initialPostOp = () => ({
   'mp-por': '',
   'or-mlk': 0,
   'or-spv': 0,
+  dol: 0,
   hec: 0,
   ingesta: '',
   'ingesta-cantidad': '',
@@ -250,6 +251,20 @@ const PostOpForm = ({ data, setData, onSave, onCancel, loading, isEditing }) => 
             </select>
           </div>
         </div>
+      </div>
+
+      {/* dol */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <label className="block text-sm font-medium text-gray-700 mb-2">dol (0–5)</label>
+        <select
+          value={data.dol ?? 0}
+          onChange={(e) => update('dol', parseInt(e.target.value, 10))}
+          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        >
+          {[0, 1, 2, 3, 4, 5].map((n) => (
+            <option key={n} value={n}>{n}</option>
+          ))}
+        </select>
       </div>
 
       {/* hec */}

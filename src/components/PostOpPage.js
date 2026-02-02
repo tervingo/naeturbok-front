@@ -61,6 +61,11 @@ const escalasZonas = [
     ],
   },
   {
+    label: 'dol',
+    bg: 'bg-orange-50 border-orange-200/60',
+    fields: [{ key: 'dol', label: 'dol' }],
+  },
+  {
     label: 'hec',
     bg: 'bg-slate-100 border-slate-200/80',
     fields: [{ key: 'hec', label: 'hec' }],
