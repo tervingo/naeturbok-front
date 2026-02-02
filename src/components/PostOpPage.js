@@ -52,15 +52,6 @@ const escalasZonas = [
     ],
   },
   {
-    label: 'ingesta + medicación',
-    bg: 'bg-rose-50 border-rose-200/60',
-    fields: [
-      { key: 'ingesta', label: 'ingesta' },
-      { key: 'ingesta-cantidad', label: 'cantidad', onlyWhen: 'ingesta' },
-      { key: 'medicación', label: 'medicación' },
-    ],
-  },
-  {
     label: 'dol',
     bg: 'bg-orange-50 border-orange-200/60',
     fields: [{ key: 'dol', label: 'dol' }],
@@ -69,6 +60,15 @@ const escalasZonas = [
     label: 'hec',
     bg: 'bg-slate-100 border-slate-200/80',
     fields: [{ key: 'hec', label: 'hec' }],
+  },  
+  {
+    label: 'ingesta + medicación',
+    bg: 'bg-rose-50 border-rose-200/60',
+    fields: [
+      { key: 'ingesta', label: 'ingesta' },
+      { key: 'ingesta-cantidad', label: 'cantidad', onlyWhen: 'ingesta' },
+      { key: 'medicación', label: 'medicación' },
+    ],
   },
 ];
 
@@ -179,25 +179,26 @@ const PostOpPage = () => {
                   <p className="text-slate-400 text-sm mt-1">Pulsa «Nuevo registro» para añadir uno.</p>
                 </div>
               ) : (
-                <ul className="space-y-4">
-                  {records.map((r) => (
-                    <li
-                      key={r._id}
-                      className="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden hover:shadow-md hover:border-slate-300/80 transition-all duration-200"
-                    >
-                      <div className="p-5 sm:p-6">
-                        <div className="flex flex-wrap items-baseline justify-between gap-3 mb-4">
-                          <div className="flex items-baseline gap-2">
-                            <time className="text-xl font-semibold text-slate-800 tracking-tight">
+                <ul className="space-y-0">
+                  {records.map((r, idx) => (
+                    <React.Fragment key={r._id}>
+                      {idx > 0 && <li className="h-1 bg-black my-2" aria-hidden />}
+                      <li
+                        className="bg-[#008000] rounded-xl shadow-sm border border-slate-200/80 overflow-hidden hover:shadow-md hover:border-slate-300/80 transition-all duration-200"
+                      >
+                      <div className="p-3 sm:p-4">
+                        <div className="flex flex-wrap items-baseline justify-between gap-2 mb-2">
+                          <div className="flex items-baseline gap-1.5">
+                            <time className="text-base font-semibold text-slate-800 tracking-tight">
                               {formatFecha(r.fecha)}
                             </time>
-                            <span className="text-xl font-semibold text-slate-700 tabular-nums">
+                            <span className="text-base font-semibold text-slate-700 tabular-nums">
                               {r.hora || '—'}
                             </span>
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1.5">
                             <span
-                              className={`inline-flex items-center px-3 py-1 rounded-full text-lg font-medium ${
+                              className={`inline-flex items-center px-2 py-0.5 rounded-full text-sm font-medium ${
                                 r.pos === 'depie'
                                   ? 'bg-amber-100 text-amber-800'
                                   : 'bg-sky-100 text-sky-800'
@@ -208,20 +209,20 @@ const PostOpPage = () => {
                             <button
                               type="button"
                               onClick={() => handleEdit(r)}
-                              className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+                              className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"
                               title="Editar"
                             >
-                              <Pencil size={20} />
+                              <Pencil size={16} />
                             </button>
                           </div>
                         </div>
-                        <div className="flex flex-wrap gap-3">
+                        <div className="flex flex-wrap gap-2">
                           {escalasZonas.map((zona) => (
                             <div
                               key={zona.label}
-                              className={`rounded-lg border px-4 py-2.5 text-lg ${zona.bg}`}
+                              className={`rounded-md border px-2.5 py-1.5 text-sm ${zona.bg}`}
                             >
-                              <div className="flex flex-wrap items-center gap-y-2">
+                              <div className="flex flex-wrap items-center gap-y-1">
                                 {zona.fields
                                   .filter(
                                     (f) =>
@@ -245,7 +246,8 @@ const PostOpPage = () => {
                           ))}
                         </div>
                       </div>
-                    </li>
+                      </li>
+                    </React.Fragment>
                   ))}
                 </ul>
               )}
