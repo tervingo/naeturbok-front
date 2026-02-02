@@ -188,11 +188,12 @@ const PostOpPage = () => {
                       >
                       <div className="p-3 sm:p-4">
                         <div className="flex flex-wrap items-baseline justify-between gap-2 mb-2">
-                          <div className="flex items-baseline gap-1.5">
-                            <time className="text-base font-semibold text-slate-800 tracking-tight">
+                          <div className="flex items-baseline gap-3">
+                            <time className="text-base font-bold text-slate-800 tracking-tight">
                               {formatFecha(r.fecha)}
                             </time>
-                            <span className="text-base font-semibold text-slate-700 tabular-nums">
+                            <span className="text-slate-400 font-light" aria-hidden>·</span>
+                            <span className="text-base font-bold text-slate-700 tabular-nums">
                               {r.hora || '—'}
                             </span>
                           </div>
