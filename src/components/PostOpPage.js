@@ -52,6 +52,14 @@ const escalasZonas = [
     ],
   },
   {
+    label: 'ingesta + medicación',
+    bg: 'bg-rose-50 border-rose-200/60',
+    fields: [
+      { key: 'ingesta', label: 'ingesta' },
+      { key: 'medicación', label: 'medicación' },
+    ],
+  },
+  {
     label: 'hec',
     bg: 'bg-slate-100 border-slate-200/80',
     fields: [{ key: 'hec', label: 'hec' }],
@@ -221,7 +229,7 @@ const PostOpPage = () => {
                                       <div className="flex items-baseline gap-2">
                                         <span className="text-slate-500 font-medium">{label}</span>
                                         <span className="font-semibold tabular-nums text-slate-800 min-w-[1.25rem]">
-                                          {r[key] ?? '—'}
+                                          {(r[key] ?? '') === '' ? '—' : r[key]}
                                         </span>
                                       </div>
                                     </React.Fragment>

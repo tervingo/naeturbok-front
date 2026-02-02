@@ -14,6 +14,8 @@ const initialPostOp = () => ({
   'or-mlk': 0,
   'or-spv': 0,
   hec: 0,
+  ingesta: '',
+  medicación: '',
 });
 
 const PostOpForm = ({ data, setData, onSave, onCancel, loading, isEditing }) => {
@@ -188,6 +190,42 @@ const PostOpForm = ({ data, setData, onSave, onCancel, loading, isEditing }) => 
               {Array.from({ length: 11 }, (_, i) => i).map((n) => (
                 <option key={n} value={n}>{n}</option>
               ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Ingesta + Medicación */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">Ingesta y medicación</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Ingesta</label>
+            <select
+              value={data.ingesta ?? ''}
+              onChange={(e) => update('ingesta', e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">—</option>
+              <option value="agua">agua</option>
+              <option value="agua con gas">agua con gas</option>
+              <option value="cerveza">cerveza</option>
+              <option value="zumo">zumo</option>
+              <option value="leche">leche</option>
+              <option value="otros">otros</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Medicación</label>
+            <select
+              value={data.medicación ?? ''}
+              onChange={(e) => update('medicación', e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">—</option>
+              <option value="paracetamol 1mg">paracetamol 1mg</option>
+              <option value="iboprufeno 600mg">iboprufeno 600mg</option>
+              <option value="antibiótico">antibiótico</option>
             </select>
           </div>
         </div>
