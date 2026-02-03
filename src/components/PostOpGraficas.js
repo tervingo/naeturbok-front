@@ -21,6 +21,12 @@ const daysSinceRef = (fecha, hora) => {
   return (d - REF_DATE) / (1000 * 60 * 60 * 24);
 };
 
+const diasToFecha = (dias) => {
+  const d = new Date(REF_DATE);
+  d.setDate(d.getDate() + Math.round(dias));
+  return d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+};
+
 const PostOpGraficas = () => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -85,13 +91,15 @@ const PostOpGraficas = () => {
               <ResponsiveContainer>
                 <LineChart
                   data={chartData}
-                  margin={{ top: 20, right: 30, bottom: 20, left: 20 }}
+                  margin={{ top: 20, right: 30, bottom: 60, left: 20 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis
                     dataKey="dias"
                     type="number"
                     domain={['dataMin', 'dataMax']}
+                    tick={{ angle: -45, textAnchor: 'end' }}
+                    tickFormatter={diasToFecha}
                     label={{
                       value: 'Días desde 21/01/2026',
                       position: 'insideBottom',
