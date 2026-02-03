@@ -18,14 +18,23 @@ const formatFecha = (fecha) => {
   }
 };
 
+const toPond = (v) => {
+  if (v === 0) return -2;
+  if (v === 0.5) return -1;
+  if (v === 1) return 0;
+  return v;
+};
+
 const calcPuntuacion = (r) => {
   const ch = Number(r['or-ch']) || 0;
   const vol = Number(r['or-vol']) || 0;
+  const chPond = toPond(ch);
+  const volPond = toPond(vol);
   const mlk = Number(r['or-mlk']) || 0;
   const spv = Number(r['or-spv']) || 0;
   const mp = r['or-mp'] === 'no' || r['or-mp'] == null ? -1 : Number(r['or-mp']) || 0;
   const dol = Number(r['dol']) || 0;
-  const score = ch + vol - 0.2 * mlk + 0.2 * spv - 2 * mp - dol;
+  const score = chPond + volPond - 0.2 * mlk + 0.2 * spv - 2 * mp - dol;
   return Math.round(score * 10) / 10;
 };
 
@@ -201,9 +210,10 @@ const PostOpPage = () => {
                         <div className="flex flex-wrap items-baseline justify-between gap-2 mb-2">
                           <div className="flex items-baseline gap-3">
                             {(() => {
-                              const score = calcPuntuacion(r);
-                              const bgColor = score > 4 ? '#7FFF00' : score > 0 ? '#008000' : '#FF4500';
-                              const textColor = score > 4 ? '#000000' : '#FFFFFF';
+                              const hasIngesta = r.ingesta && String(r.ingesta).trim() !== '';
+                              const score = hasIngesta ? null : calcPuntuacion(r);
+                              const bgColor = score === null ? '#94a3b8' : score > 4 ? '#7FFF00' : score > 0 ? '#008000' : '#FF4500';
+                              const textColor = score === null ? '#000000' : score > 4 ? '#000000' : '#FFFFFF';
                               return (
                                 <span
                                   style={{
@@ -220,7 +230,7 @@ const PostOpPage = () => {
                                     color: textColor,
                                   }}
                                 >
-                                  {score}
+                                  {score === null ? 'n.a.' : score}
                                 </span>
                               );
                             })()}
