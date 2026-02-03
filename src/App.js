@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import TrackingApp from './components/TrackingApp';
 import PostOpPage from './components/PostOpPage';
+import PostOpGraficas from './components/PostOpGraficas';
 import './index.css';
 
 const basename = process.env.PUBLIC_URL || '/';
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<TrackingApp />} />
           <Route path="postop" element={<PostOpPage />} />
+          <Route path="postop/graficas" element={<PostOpGraficas />} />
         </Routes>
       </BrowserRouter>
     </div>

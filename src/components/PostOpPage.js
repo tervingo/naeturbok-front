@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PostOpForm, { initialPostOp } from './PostOpForm';
 import ApiService from '../services/api';
-import { ArrowLeft, Plus, Pencil } from 'lucide-react';
+import { ArrowLeft, Plus, Pencil, BarChart3 } from 'lucide-react';
+import { calcPuntuacion, hasIngesta } from '../utils/postop';
 
 const formatFecha = (fecha) => {
   if (!fecha) return '—';
@@ -16,26 +17,6 @@ const formatFecha = (fecha) => {
   } catch {
     return fecha;
   }
-};
-
-const toPond = (v) => {
-  if (v === 0) return -2;
-  if (v === 0.5) return -1;
-  if (v === 1) return 0;
-  return v;
-};
-
-const calcPuntuacion = (r) => {
-  const ch = Number(r['or-ch']) || 0;
-  const vol = Number(r['or-vol']) || 0;
-  const chPond = toPond(ch);
-  const volPond = toPond(vol);
-  const mlk = Number(r['or-mlk']) || 0;
-  const spv = Number(r['or-spv']) || 0;
-  const mp = r['or-mp'] === 'no' || r['or-mp'] == null ? -1 : Number(r['or-mp']) || 0;
-  const dol = Number(r['dol']) || 0;
-  const score = chPond + volPond - 0.2 * mlk + 0.2 * spv - 2 * mp - dol;
-  return Math.round(score * 10) / 10;
 };
 
 const escalasZonas = [
@@ -166,14 +147,23 @@ const PostOpPage = () => {
               <h1 className="text-2xl font-bold text-gray-900">PostOp</h1>
             </div>
             {viewMode === 'list' && (
-              <button
-                type="button"
-                onClick={() => setViewMode('form')}
-                className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-              >
-                <Plus size={18} />
-                Nuevo registro
-              </button>
+              <div className="flex items-center gap-2">
+                <Link
+                  to="graficas"
+                  className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-slate-700"
+                >
+                  <BarChart3 size={18} />
+                  Gráficas
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('form')}
+                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                >
+                  <Plus size={18} />
+                  Nuevo registro
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -210,8 +200,8 @@ const PostOpPage = () => {
                         <div className="flex flex-wrap items-baseline justify-between gap-2 mb-2">
                           <div className="flex items-baseline gap-3">
                             {(() => {
-                              const hasIngesta = r.ingesta && String(r.ingesta).trim() !== '';
-                              const score = hasIngesta ? null : calcPuntuacion(r);
+                              const tieneIngesta = hasIngesta(r);
+                              const score = tieneIngesta ? null : calcPuntuacion(r);
                               const bgColor = score === null ? '#94a3b8' : score > 4 ? '#7FFF00' : score > 0 ? '#008000' : '#FF4500';
                               const textColor = score === null ? '#000000' : score > 4 ? '#000000' : '#FFFFFF';
                               return (
