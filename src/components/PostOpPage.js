@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PostOpForm, { initialPostOp } from './PostOpForm';
 import ApiService from '../services/api';
-import { ArrowLeft, Plus, Pencil, BarChart3 } from 'lucide-react';
+import { ArrowLeft, Plus, Pencil, Trash2, BarChart3 } from 'lucide-react';
 import { calcPuntuacion, hasIngesta } from '../utils/postop';
 
 const formatFecha = (fecha) => {
@@ -81,6 +81,7 @@ const PostOpPage = () => {
   const [editingId, setEditingId] = useState(null);
   const [saveLoading, setSaveLoading] = useState(false);
   const [savedMessage, setSavedMessage] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
 
   const fetchRecords = async () => {
     setListLoading(true);
@@ -129,6 +130,21 @@ const PostOpPage = () => {
     setFormData({ ...initialPostOp(), ...record });
     setEditingId(record._id);
     setViewMode('form');
+  };
+
+  const handleDelete = async (record) => {
+    if (!window.confirm('¿Borrar este registro?')) return;
+    setDeletingId(record._id);
+    try {
+      const res = await ApiService.deletePostop(record._id);
+      if (res.success) {
+        fetchRecords();
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error al borrar: ' + err.message);
+    }
+    setDeletingId(null);
   };
 
   return (
@@ -250,6 +266,15 @@ const PostOpPage = () => {
                               title="Editar"
                             >
                               <Pencil size={16} />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDelete(r)}
+                              disabled={deletingId === r._id}
+                              className="p-1.5 rounded-lg text-slate-500 hover:bg-red-50 hover:text-red-600 transition-colors disabled:opacity-50"
+                              title="Borrar"
+                            >
+                              <Trash2 size={16} />
                             </button>
                           </div>
                         </div>

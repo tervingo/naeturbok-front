@@ -113,6 +113,12 @@ class ApiService {
     });
   }
 
+  async deletePostop(id) {
+    return this.request(`/postop/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
   async exportToExcel(records, startDate = null, endDate = null) {
     // Import xlsx dynamically to avoid bundle size issues
     const XLSX = await import('xlsx');
