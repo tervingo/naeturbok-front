@@ -23,3 +23,5 @@ export const calcPuntuacion = (r) => {
 };
 
 export const hasIngesta = (r) => r.ingesta && String(r.ingesta).trim() !== '';
+
+export const hasMp = (r) => r['or-mp'] !== 'no';

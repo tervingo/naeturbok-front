@@ -47,9 +47,15 @@ const PostOpGraficas = () => {
     fetchData();
   }, []);
 
-  const { chartData, chartDataChVol, maxDay, dayTicks } = useMemo(() => {
+  const { chartData, chartDataChVol, maxDay, dayTicks, yMin, yMax } = useMemo(() => {
     const dataPoints = records
-      .filter((r) => !hasIngesta(r))
+      .filter((r) => {
+        if (hasIngesta(r)) return false;
+        const mp = r['or-mp'];
+        const ch = Number(r['or-ch']) || 0;
+        if (mp !== 'no' && mp != null && ch === 0) return false;
+        return true;
+      })
       .map((r) => ({
         dias: Math.round(daysSinceRef(r.fecha, r.hora) * 10) / 10,
         score: calcPuntuacion(r),
@@ -87,11 +93,18 @@ const PostOpGraficas = () => {
     const dayTicks = [];
     for (let i = 0; i <= maxDay; i++) dayTicks.push(i);
 
+    const scoreMin = dataPoints.length > 0 ? Math.min(...dataPoints.map((d) => d.score)) : -2;
+    const scoreMax = dataPoints.length > 0 ? Math.max(...dataPoints.map((d) => d.score)) : 6;
+    const yMin = Math.min(scoreMin - 1, -1);
+    const yMax = Math.max(scoreMax + 1, 6);
+
     return {
       chartData: dataPoints,
       chartDataChVol: dataPointsChVol,
       maxDay,
       dayTicks,
+      yMin,
+      yMax,
     };
   }, [records]);
 
@@ -134,6 +147,9 @@ const PostOpGraficas = () => {
                   data={chartData}
                   margin={{ top: 20, right: 30, bottom: 60, left: 20 }}
                 >
+                  <ReferenceArea y1={yMin} y2={0} fill="rgba(255, 69, 0, 0.2)" zIndex={0} />
+                  <ReferenceArea y1={0} y2={4} fill="rgba(0, 128, 0, 0.2)" zIndex={0} />
+                  <ReferenceArea y1={4} y2={yMax} fill="rgba(127, 255, 0, 0.2)" zIndex={0} />
                   {dayTicks.map((d) => (
                     <ReferenceArea
                       key={d}
@@ -159,6 +175,7 @@ const PostOpGraficas = () => {
                     }}
                   />
                   <YAxis
+                    domain={[yMin, yMax]}
                     label={{
                       value: 'Puntuación',
                       angle: -90,
@@ -187,7 +204,14 @@ const PostOpGraficas = () => {
                     dataKey="score"
                     stroke="#2563eb"
                     strokeWidth={2}
-                    dot={{ r: 4 }}
+                    dot={(props) => {
+                      const { cx, cy, payload } = props;
+                      const score = payload?.score ?? 0;
+                      let fill = '#FF4500';
+                      if (score > 0 && score <= 4) fill = '#008000';
+                      else if (score > 4) fill = '#7FFF00';
+                      return <circle cx={cx} cy={cy} r={4} fill={fill} stroke="#2563eb" strokeWidth={1} />;
+                    }}
                     name="Puntuación"
                   />
                 </LineChart>
@@ -206,6 +230,11 @@ const PostOpGraficas = () => {
                   data={chartDataChVol}
                   margin={{ top: 20, right: 30, bottom: 60, left: 20 }}
                 >
+                  <ReferenceArea y1={0} y2={0.5} fill="rgba(255, 69, 0, 0.2)" zIndex={0} />
+                  <ReferenceArea y1={0.5} y2={1} fill="rgba(205, 92, 92, 0.2)" zIndex={0} />
+                  <ReferenceArea y1={1} y2={1.5} fill="rgba(255, 215, 0, 0.2)" zIndex={0} />
+                  <ReferenceArea y1={1.5} y2={2} fill="rgba(0, 128, 0, 0.2)" zIndex={0} />
+                  <ReferenceArea y1={2} y2={3} fill="rgba(127, 255, 0, 0.2)" zIndex={0} />
                   {dayTicks.map((d) => (
                     <ReferenceArea
                       key={d}
@@ -231,6 +260,8 @@ const PostOpGraficas = () => {
                     }}
                   />
                   <YAxis
+                    domain={[0, 3]}
+                    ticks={[0, 0.5, 1, 1.5, 2, 3]}
                     label={{
                       value: 'ch',
                       angle: -90,
@@ -257,7 +288,18 @@ const PostOpGraficas = () => {
                     dataKey="ch"
                     stroke="#0ea5e9"
                     strokeWidth={2}
-                    dot={{ r: 4 }}
+                    dot={(props) => {
+                      const { cx, cy, payload } = props;
+                      const ch = payload?.ch ?? 0;
+                      let fill = '#FF4500';
+                      if (ch <= 0.25) fill = '#FF4500';
+                      else if (ch <= 0.75) fill = '#CD5C5C';
+                      else if (ch <= 1.25) fill = '#FFD700';
+                      else if (ch <= 1.75) fill = '#008000';
+                      else if (ch <= 2.5) fill = '#7FFF00';
+                      else fill = '#00FFFF';
+                      return <circle cx={cx} cy={cy} r={4} fill={fill} stroke="#0ea5e9" strokeWidth={1} />;
+                    }}
                     name="ch"
                   />
                 </LineChart>

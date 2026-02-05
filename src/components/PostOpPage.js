@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PostOpForm, { initialPostOp } from './PostOpForm';
 import ApiService from '../services/api';
 import { ArrowLeft, Plus, Pencil, Trash2, BarChart3 } from 'lucide-react';
-import { calcPuntuacion, hasIngesta } from '../utils/postop';
+import { calcPuntuacion, hasIngesta, hasMp } from '../utils/postop';
 
 const formatFecha = (fecha) => {
   if (!fecha) return '—';
@@ -217,7 +217,8 @@ const PostOpPage = () => {
                           <div className="flex items-baseline gap-3">
                             {(() => {
                               const tieneIngesta = hasIngesta(r);
-                              const score = tieneIngesta ? null : calcPuntuacion(r);
+                              const tieneMp = hasMp(r);
+                              const score = tieneIngesta || tieneMp ? null : calcPuntuacion(r);
                               const bgColor = score === null ? '#94a3b8' : score > 4 ? '#7FFF00' : score > 0 ? '#008000' : '#FF4500';
                               const textColor = score === null ? '#000000' : score > 4 ? '#000000' : '#FFFFFF';
                               return (
