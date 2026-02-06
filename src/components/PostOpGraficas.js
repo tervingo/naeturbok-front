@@ -28,6 +28,18 @@ const diasToFecha = (dias) => {
   return d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
 };
 
+const chToLabel = (value) => {
+  const labels = {
+    0: 'Sin flujo',
+    0.5: 'Goteo',
+    1: 'flujo débil (preop)',
+    1.5: 'flujo medio',
+    2: 'flujo bueno',
+    3: 'flujo fuerte',
+  };
+  return labels[value] ?? value;
+};
+
 const PostOpGraficas = () => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -98,9 +110,48 @@ const PostOpGraficas = () => {
     const yMin = Math.min(scoreMin - 1, -1);
     const yMax = Math.max(scoreMax + 1, 6);
 
+    // Calcular media por día para score
+    const scoreByDay = {};
+    dataPoints.forEach((d) => {
+      const day = Math.round(d.dias);
+      if (!scoreByDay[day]) {
+        scoreByDay[day] = { sum: 0, count: 0 };
+      }
+      scoreByDay[day].sum += d.score;
+      scoreByDay[day].count += 1;
+    });
+    // Calcular media por día para score y agregar a cada punto
+    const scoreAverageMap = {};
+    Object.keys(scoreByDay).forEach((day) => {
+      scoreAverageMap[day] = Math.round((scoreByDay[day].sum / scoreByDay[day].count) * 10) / 10;
+    });
+    const chartDataWithAvg = dataPoints.map((d) => ({
+      ...d,
+      scoreAvg: scoreAverageMap[Math.round(d.dias)] ?? null,
+    }));
+
+    // Calcular media por día para ch y agregar a cada punto
+    const chByDay = {};
+    dataPointsChVol.forEach((d) => {
+      const day = Math.round(d.dias);
+      if (!chByDay[day]) {
+        chByDay[day] = { sum: 0, count: 0 };
+      }
+      chByDay[day].sum += d.ch;
+      chByDay[day].count += 1;
+    });
+    const chAverageMap = {};
+    Object.keys(chByDay).forEach((day) => {
+      chAverageMap[day] = Math.round((chByDay[day].sum / chByDay[day].count) * 10) / 10;
+    });
+    const chartDataChVolWithAvg = dataPointsChVol.map((d) => ({
+      ...d,
+      chAvg: chAverageMap[Math.round(d.dias)] ?? null,
+    }));
+
     return {
-      chartData: dataPoints,
-      chartDataChVol: dataPointsChVol,
+      chartData: chartDataWithAvg,
+      chartDataChVol: chartDataChVolWithAvg,
       maxDay,
       dayTicks,
       yMin,
@@ -183,18 +234,28 @@ const PostOpGraficas = () => {
                     }}
                   />
                   <Tooltip
-                    formatter={(value) => [value, 'Puntuación']}
+                    formatter={(value, name) => {
+                      if (name === 'Media') return [value, 'Media'];
+                      return [value, 'Puntuación'];
+                    }}
                     labelFormatter={(dias) => `Día ${dias}`}
                     content={({ active, payload }) => {
                       if (!active || !payload?.length) return null;
                       const p = payload[0].payload;
+                      const isAverage = payload[0].dataKey === 'scoreAvg';
                       return (
                         <div className="bg-white border border-slate-200 rounded-lg shadow-lg px-3 py-2 text-sm">
                           <div>Día {p.dias}</div>
-                          <div>Puntuación: {p.score}</div>
-                          <div className="text-slate-500">
-                            {p.fecha} {p.hora}
-                          </div>
+                          {isAverage ? (
+                            <div>Media: {p.scoreAvg}</div>
+                          ) : (
+                            <>
+                              <div>Puntuación: {p.score}</div>
+                              <div className="text-slate-500">
+                                {p.fecha} {p.hora}
+                              </div>
+                            </>
+                          )}
                         </div>
                       );
                     }}
@@ -214,6 +275,16 @@ const PostOpGraficas = () => {
                     }}
                     name="Puntuación"
                   />
+                  <Line
+                    type="monotone"
+                    dataKey="scoreAvg"
+                    stroke="#374151"
+                    strokeWidth={2}
+                    strokeDasharray="2 2"
+                    dot={false}
+                    name="Media"
+                    connectNulls={false}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -222,7 +293,7 @@ const PostOpGraficas = () => {
           {chartDataChVol.length > 0 && (
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
-              ch por días desde 21/01/2026
+              Flujo por días desde 21/01/2026
             </h2>
             <div style={{ width: '100%', height: 400 }}>
               <ResponsiveContainer>
@@ -262,8 +333,9 @@ const PostOpGraficas = () => {
                   <YAxis
                     domain={[0, 3]}
                     ticks={[0, 0.5, 1, 1.5, 2, 3]}
+                    tickFormatter={chToLabel}
                     label={{
-                      value: 'ch',
+                      value: 'Flujo',
                       angle: -90,
                       position: 'insideLeft',
                     }}
@@ -272,13 +344,20 @@ const PostOpGraficas = () => {
                     content={({ active, payload }) => {
                       if (!active || !payload?.length) return null;
                       const p = payload[0].payload;
+                      const isAverage = payload[0].dataKey === 'chAvg';
                       return (
                         <div className="bg-white border border-slate-200 rounded-lg shadow-lg px-3 py-2 text-sm">
                           <div>Día {p.dias}</div>
-                          <div>ch: {p.ch}</div>
-                          <div className="text-slate-500">
-                            {p.fecha} {p.hora}
-                          </div>
+                          {isAverage ? (
+                            <div>Media: {p.chAvg}</div>
+                          ) : (
+                            <>
+                              <div>ch: {p.ch}</div>
+                              <div className="text-slate-500">
+                                {p.fecha} {p.hora}
+                              </div>
+                            </>
+                          )}
                         </div>
                       );
                     }}
@@ -301,6 +380,16 @@ const PostOpGraficas = () => {
                       return <circle cx={cx} cy={cy} r={4} fill={fill} stroke="#0ea5e9" strokeWidth={1} />;
                     }}
                     name="ch"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="chAvg"
+                    stroke="#374151"
+                    strokeWidth={3}
+                    strokeDasharray="2 2"
+                    dot={false}
+                    name="Media"
+                    connectNulls={false}
                   />
                 </LineChart>
               </ResponsiveContainer>
