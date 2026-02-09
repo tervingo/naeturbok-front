@@ -34,7 +34,7 @@ const chToLabel = (value) => {
     0.5: 'Goteo',
     1: 'flujo débil (preop)',
     1.5: 'flujo medio',
-    2: 'flujo bueno',
+    2: 'flujo normal',
     3: 'flujo fuerte',
   };
   return labels[value] ?? value;
@@ -80,11 +80,12 @@ const PostOpGraficas = () => {
       .filter((r) => {
         if (hasIngesta(r)) return false;
         const pos = r.pos || 'depie';
+        if (pos === 'sentado') return false;
         const ch = Number(r['or-ch']) || 0;
         const vol = Number(r['or-vol']) || 0;
         const mp = r['or-mp'];
         if (mp !== 'no' && mp != null && ch === 0) return false;
-        return !(pos === 'sentado' && ch === 0 && vol === 0);
+        return true;
       })
       .map((r) => ({
         dias: Math.round(daysSinceRef(r.fecha, r.hora) * 10) / 10,
