@@ -9,6 +9,9 @@ import {
   Tooltip,
   ResponsiveContainer,
   ReferenceArea,
+  ReferenceDot,
+  ReferenceLine,
+  Label,
 } from 'recharts';
 import ApiService from '../services/api';
 import { ArrowLeft } from 'lucide-react';
@@ -59,7 +62,7 @@ const PostOpGraficas = () => {
     fetchData();
   }, []);
 
-  const { chartData, chartDataChVol, maxDay, dayTicks, yMin, yMax } = useMemo(() => {
+  const { chartData, chartDataChVol, maxDay, dayTicks, yMin, yMax, daysWithMp, retiradaSondaDay } = useMemo(() => {
     const dataPoints = records
       .filter((r) => {
         if (hasIngesta(r)) return false;
@@ -89,6 +92,7 @@ const PostOpGraficas = () => {
       .map((r) => ({
         dias: Math.round(daysSinceRef(r.fecha, r.hora) * 10) / 10,
         ch: Number(r['or-ch']) || 0,
+        dol: Number(r['dol']) || 0,
         fecha: r.fecha,
         hora: r.hora || '',
       }))
@@ -149,6 +153,24 @@ const PostOpGraficas = () => {
       chAvg: chAverageMap[Math.round(d.dias)] ?? null,
     }));
 
+    // Calcular días con mp !== 'no' y mp !== 0 para mostrar cruces rojas
+    const daysWithMp = new Set();
+    records
+      .filter((r) => {
+        if (hasIngesta(r)) return false;
+        const pos = r.pos || 'depie';
+        if (pos === 'sentado') return false;
+        const mp = r['or-mp'];
+        return mp !== 'no' && mp != null && mp !== 0;
+      })
+      .forEach((r) => {
+        const day = Math.round(daysSinceRef(r.fecha, r.hora));
+        daysWithMp.add(day);
+      });
+
+    // Calcular día para retirada de sonda: 21.1.2026 07:00
+    const retiradaSondaDay = daysSinceRef('2026-01-21', '07:00');
+
     return {
       chartData: chartDataWithAvg,
       chartDataChVol: chartDataChVolWithAvg,
@@ -156,6 +178,8 @@ const PostOpGraficas = () => {
       dayTicks,
       yMin,
       yMax,
+      daysWithMp: Array.from(daysWithMp),
+      retiradaSondaDay,
     };
   }, [records]);
 
@@ -316,6 +340,52 @@ const PostOpGraficas = () => {
                       zIndex={0}
                     />
                   ))}
+                  {daysWithMp.map((day) => (
+                    <ReferenceDot
+                      key={`mp-${day}`}
+                      x={day}
+                      y={0}
+                      r={6}
+                      fill="#FF0000"
+                      stroke="#FF0000"
+                      strokeWidth={2}
+                      shape={(props) => {
+                        const { cx, cy } = props;
+                        const size = 8;
+                        return (
+                          <g>
+                            <line
+                              x1={cx - size}
+                              y1={cy - size}
+                              x2={cx + size}
+                              y2={cy + size}
+                              stroke="#FF0000"
+                              strokeWidth={2}
+                            />
+                            <line
+                              x1={cx - size}
+                              y1={cy + size}
+                              x2={cx + size}
+                              y2={cy - size}
+                              stroke="#FF0000"
+                              strokeWidth={2}
+                            />
+                          </g>
+                        );
+                      }}
+                    />
+                  ))}
+                  <ReferenceLine
+                    x={retiradaSondaDay}
+                    stroke="#000000"
+                    strokeWidth={2}
+                    label={{
+                      value: 'retirada de la sonda',
+                      position: 'top',
+                      fill: '#000000',
+                      fontSize: 12,
+                    }}
+                  />
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis
                     dataKey="dias"
@@ -344,12 +414,16 @@ const PostOpGraficas = () => {
                     content={({ active, payload }) => {
                       if (!active || !payload?.length) return null;
                       const p = payload[0].payload;
-                      const isAverage = payload[0].dataKey === 'chAvg';
+                      const dataKey = payload[0].dataKey;
+                      const isAverage = dataKey === 'chAvg';
+                      const isDol = dataKey === 'dol';
                       return (
                         <div className="bg-white border border-slate-200 rounded-lg shadow-lg px-3 py-2 text-sm">
                           <div>Día {p.dias}</div>
                           {isAverage ? (
                             <div>Media: {p.chAvg}</div>
+                          ) : isDol ? (
+                            <div>dol: {p.dol}</div>
                           ) : (
                             <>
                               <div>ch: {p.ch}</div>
@@ -389,6 +463,16 @@ const PostOpGraficas = () => {
                     strokeDasharray="2 2"
                     dot={false}
                     name="Media"
+                    connectNulls={false}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="dol"
+                    stroke="#FF0000"
+                    strokeWidth={2}
+                    strokeDasharray="5 5"
+                    dot={false}
+                    name="dol"
                     connectNulls={false}
                   />
                 </LineChart>
