@@ -454,7 +454,7 @@ const PostOpGraficas = () => {
                     }}
                     name="ch"
                   />
-                  <Line
+{/*                  <Line
                     type="monotone"
                     dataKey="chAvg"
                     stroke="#374151"
@@ -463,13 +463,14 @@ const PostOpGraficas = () => {
                     dot={false}
                     name="Media"
                     connectNulls={false}
-                  />
+                  /> */}
+
                   <Line
                     type="monotone"
                     dataKey="dol"
                     stroke="#FF0000"
                     strokeWidth={2}
-                    strokeDasharray="5 5"
+                    strokeDasharray="2 2"
                     dot={false}
                     name="dol"
                     connectNulls={false}
