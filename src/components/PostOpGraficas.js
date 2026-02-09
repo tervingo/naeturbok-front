@@ -82,7 +82,6 @@ const PostOpGraficas = () => {
         const pos = r.pos || 'depie';
         if (pos === 'sentado') return false;
         const ch = Number(r['or-ch']) || 0;
-        const vol = Number(r['or-vol']) || 0;
         const mp = r['or-mp'];
         if (mp !== 'no' && mp != null && ch === 0) return false;
         return true;
