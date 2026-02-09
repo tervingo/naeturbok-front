@@ -11,7 +11,6 @@ import {
   ReferenceArea,
   ReferenceDot,
   ReferenceLine,
-  Label,
 } from 'recharts';
 import ApiService from '../services/api';
 import { ArrowLeft } from 'lucide-react';
